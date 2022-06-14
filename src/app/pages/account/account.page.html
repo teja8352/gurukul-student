@@ -1,0 +1,55 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Account
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-item>
+    <ion-label>First Name</ion-label>
+    <ion-note slot="end" color="danger">{{student?.first_name}}</ion-note>
+  </ion-item>
+  <ion-item>
+    <ion-label>Last Name</ion-label>
+    <ion-note slot="end" color="danger">{{student?.last_name}}</ion-note>
+  </ion-item>
+  <ion-item>
+    <ion-label>Email</ion-label>
+    <ion-note slot="end" color="danger">{{student?.email}}</ion-note>
+  </ion-item>
+  <ion-item>
+    <ion-label>Mobile</ion-label>
+    <ion-note slot="end" color="danger">{{student?.mobile}}</ion-note>
+  </ion-item>
+  <ion-item>
+    <ion-label>Date of Birth</ion-label>
+    <ion-note slot="end" color="danger">{{student?.dob | date: "dd MMM YYYY"}}</ion-note>
+  </ion-item>
+  <ion-item>
+    <ion-label>Address</ion-label>
+    <ion-note slot="end" color="danger">{{student?.location?.address}}</ion-note>
+  </ion-item>
+  <ion-item>
+    <ion-label>City</ion-label>
+    <ion-note slot="end" color="danger">{{student?.location?.city}}</ion-note>
+  </ion-item>
+  <ion-item>
+    <ion-label>Pincode</ion-label>
+    <ion-note slot="end" color="danger">{{student?.location?.pincode}}</ion-note>
+  </ion-item>
+  <ion-item>
+    <ion-label>State</ion-label>
+    <ion-note slot="end" color="danger">{{student?.location?.state}}</ion-note>
+  </ion-item>
+  <ion-item>
+    <ion-label>Country</ion-label>
+    <ion-note slot="end" color="danger">{{student?.location?.country}}</ion-note>
+  </ion-item>
+
+</ion-content>

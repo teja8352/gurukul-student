@@ -1,0 +1,38 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="tests"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Payment
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-item>
+    <ion-label>UPI</ion-label>
+    <ion-note slot="end" color="danger">XXXXXX</ion-note>
+  </ion-item>
+  <ion-item>
+    <ion-label>Net Banking</ion-label>
+    <ion-note slot="end" color="danger">XXXXXXXXXXXX</ion-note>
+    <ion-note slot="end" color="danger">XXXXXX</ion-note>
+    <ion-note slot="end" color="danger">XXXXXXXX</ion-note>
+  </ion-item>
+
+  <ion-item lines="none" color="light" class="url">
+    <ion-label>
+      <ion-text>
+        {{uploadedURL || 1234}}
+      </ion-text>
+    </ion-label>
+    <ion-buttons slot="end" (click)="copyURL()">
+      <ion-button>
+        <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-item>
+
+</ion-content>
