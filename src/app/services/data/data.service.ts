@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Injectable } from '@angular/core';
 import {
   Firestore,
@@ -11,10 +12,13 @@ import {
   serverTimestamp,
   query,
   where,
-  DocumentData
+  DocumentData,
+  getDoc,
+  getDocs,
+  QuerySnapshot
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { Course, Test } from 'src/app/models/course.interface';
+import { Course, Order, Test } from 'src/app/models/course.interface';
 import { Student } from 'src/app/models/student.interface';
 
 @Injectable({
@@ -51,6 +55,26 @@ export class DataService {
   getTestById(id): Observable<Test> {
     const testDocRef = doc(this.firestore, `tests/${id}`);
     return docData(testDocRef, { idField: 'id' }) as Observable<Test>;
+  }
+
+  /**
+   * @description Order Data
+   */
+  getOrders(data: any): Promise<QuerySnapshot<DocumentData>> {
+    const ordersRef = collection(this.firestore, 'orders',);
+    const orderQueryRef = query(ordersRef, where('course_id', '==', data.course_id || ''), where('student_id', '==', data.student_id || ''));
+    return getDocs(orderQueryRef);
+    // return collectionData(orderQueryRef, { idField: 'id' }) as Observable<Order[]>;
+  }
+
+  addOrder(order: Order): DocumentData {
+    const orderRef = collection(this.firestore, 'orders');
+    return addDoc(orderRef, { ...order, created_at: serverTimestamp() });
+  }
+
+  updateOrder(order: Order | any) {
+    const orderDocRef = doc(this.firestore, `orders/${order.id}`);
+    return updateDoc(orderDocRef, { ...order, updated_at: serverTimestamp() });
   }
 
   /**

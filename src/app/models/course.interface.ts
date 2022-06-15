@@ -12,6 +12,13 @@ export interface Test extends TimeStamps, docID {
     file_urls?: Array<any>;
 }
 
+export interface Order extends TimeStamps, docID {
+    student_id: string;
+    course_id: string;
+    status: boolean;
+    payment_id?: string;
+}
+
 interface docID {
     id?: string;
 }

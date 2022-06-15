@@ -36,3 +36,11 @@
   </ion-item>
 
 </ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <input type="file" #f id="fileInput" (change)="fileSelected($event)" />
+    <ion-button for="fileInput" expand="full" class="ion-no-margin" size="large" (click)="f.click()">
+      <span style="font-size: 14px">Payment Completed</span>
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

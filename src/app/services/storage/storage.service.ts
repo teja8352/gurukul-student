@@ -21,7 +21,6 @@ export class StorageService {
 
   getUserProfile() {
     const student = this.auth.currentUser;
-    console.log(student);
     const studentDocRef = doc(this.firestore, `students/${student.uid}`);
     return docData(studentDocRef, { idField: 'id' });
   }
@@ -38,5 +37,4 @@ export class StorageService {
       return { error: e };
     }
   }
-
 }
