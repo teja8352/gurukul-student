@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-len */
 import { Injectable } from '@angular/core';
 import {
@@ -57,11 +58,28 @@ export class DataService {
     return docData(testDocRef, { idField: 'id' }) as Observable<Test>;
   }
 
+  updateTest(test: Test) {
+    const testDocRef = doc(this.firestore, `tests/${test.id}`);
+    return updateDoc(testDocRef, { ...test, updated_at: serverTimestamp() });
+  }
+
   /**
    * @description Order Data
    */
+  getOrdersList(): Observable<Order[]> {
+    const ordersRef = collection(this.firestore, 'orders');
+    const orderQueryRef = query(ordersRef, where('student_id', '==', localStorage.getItem('uid') || ''));
+    return collectionData(orderQueryRef, { idField: 'id' }) as Observable<Order[]>;
+  }
+
+  getPurchasedOrders(): Observable<Order[]> {
+    const ordersRef = collection(this.firestore, 'orders');
+    const orderQueryRef = query(ordersRef, where('student_id', '==', localStorage.getItem('uid') || ''), where('status', '==', true));
+    return collectionData(orderQueryRef, { idField: 'id' }) as Observable<Order[]>;
+  }
+
   getOrders(data: any): Promise<QuerySnapshot<DocumentData>> {
-    const ordersRef = collection(this.firestore, 'orders',);
+    const ordersRef = collection(this.firestore, 'orders');
     const orderQueryRef = query(ordersRef, where('course_id', '==', data.course_id || ''), where('student_id', '==', data.student_id || ''));
     return getDocs(orderQueryRef);
     // return collectionData(orderQueryRef, { idField: 'id' }) as Observable<Order[]>;

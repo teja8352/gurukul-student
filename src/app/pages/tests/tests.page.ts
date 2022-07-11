@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DocumentReference, DocumentData } from '@angular/fire/firestore';
-import { Order, Test } from 'src/app/models/course.interface';
+import { Course, Order, Test } from 'src/app/models/course.interface';
+import { Student } from 'src/app/models/student.interface';
 import { CommonService } from 'src/app/services/common/common.service';
 import { DataService } from 'src/app/services/data/data.service';
 import { StateService } from 'src/app/services/state/state.service';
@@ -12,8 +14,8 @@ import { StateService } from 'src/app/services/state/state.service';
 })
 export class TestsPage implements OnInit {
 
-
   public tests: Test[] = [];
+  public student: Student;
 
   constructor(
     private dataService: DataService,
@@ -25,14 +27,23 @@ export class TestsPage implements OnInit {
       this.tests = res;
       this.cd.detectChanges();
     });
+    this.dataService.getStudentById(localStorage.getItem('uid') || '').subscribe((resp: any) => {
+      this.student = resp[0];
+      localStorage.setItem('student', JSON.stringify(this.student));
+      this.cd.detectChanges();
+    });
   }
 
   ngOnInit() { }
 
   buyCourse() {
+    const course: Course = this.stateService.getData('course') || {};
     const payload: Order = {
-      course_id: this.stateService.getData('course')?.id,
+      course_id: course?.id,
+      course_name: course?.title,
+      course_desc: course?.description,
       student_id: localStorage.getItem('uid'),
+      student_name: this.student.first_name + ' ' + this.student.last_name,
       status: false
     };
     this.dataService.getOrders(payload).then((res: any) => {

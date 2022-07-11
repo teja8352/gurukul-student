@@ -6,3 +6,23 @@
     display: grid;
     place-items: center;
 }
+
+ion-item[input] {
+    --min-height: 56px;
+    --highlight-height: 0 !important;
+    --show-full-highlight: 2 !important;
+    --border-width: 0 !important;
+    --background: var(--ion-color-light-rgb);
+    border-radius: 15px;
+    --border-radius: 15px;
+}
+
+ion-button {
+    height: 56px;
+    margin: 0;
+    --border-radius: 15px;
+    text-transform: capitalize !important;
+    font-size: 18px !important;
+    font-weight: 500;
+    color: var(--ion-color-white);
+}

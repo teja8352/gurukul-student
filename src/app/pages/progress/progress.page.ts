@@ -1,0 +1,140 @@
+/* eslint-disable space-before-function-paren */
+/* eslint-disable object-shorthand */
+import { Component, OnInit } from '@angular/core';
+import * as HighCharts from 'highcharts';
+
+@Component({
+  selector: 'app-progress',
+  templateUrl: './progress.page.html',
+  styleUrls: ['./progress.page.scss'],
+})
+export class ProgressPage implements OnInit {
+
+  constructor() { }
+
+  ngOnInit() {
+    // @ts-ignore
+    const bar = HighCharts.chart('bar-container', {
+      chart: {
+        type: 'bar'
+      },
+      title: {
+        text: 'Fruit Consumption'
+      },
+      xAxis: {
+        categories: ['Apples', 'Bananas', 'Oranges']
+      },
+      yAxis: {
+        title: {
+          text: 'Fruit eaten'
+        }
+      },
+      series: [{
+        name: 'Jane',
+        data: [1, 0, 4]
+      }, {
+        name: 'John',
+        data: [5, 7, 3]
+      }]
+    });
+
+    // @ts-ignore
+    const barr = HighCharts.chart('barr-container', {
+      chart: {
+        type: 'bar'
+      },
+      title: {
+        text: 'Fruit Consumption'
+      },
+      xAxis: {
+        categories: ['Apples', 'Bananas', 'Oranges']
+      },
+      yAxis: {
+        title: {
+          text: 'Fruit eaten'
+        }
+      },
+      series: [{
+        name: 'Jane',
+        data: [1, 0, 4]
+      }, {
+        name: 'John',
+        data: [5, 7, 3]
+      }]
+    });
+
+    // @ts-ignore
+    const line = HighCharts.chart('line-container', {
+      chart: {
+        type: 'spline'
+      },
+      title: {
+        text: 'Monthly Average Temperature'
+      },
+      subtitle: {
+        text: 'Source: WorldClimate.com'
+      },
+      xAxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        accessibility: {
+          description: 'Months of the year'
+        }
+      },
+      yAxis: {
+        title: {
+          text: 'Temperature'
+        },
+        labels: {
+          formatter: function () {
+            return this.value + '°';
+          }
+        }
+      },
+      tooltip: {
+        crosshairs: true,
+        shared: true
+      },
+      plotOptions: {
+        spline: {
+          marker: {
+            radius: 4,
+            lineColor: '#666666',
+            lineWidth: 1
+          }
+        }
+      },
+      series: [{
+        name: 'Tokyo',
+        marker: {
+          symbol: 'square'
+        },
+        data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, {
+          y: 26.5,
+          marker: {
+            symbol: 'url(https://www.highcharts.com/samples/graphics/sun.png)'
+          },
+          accessibility: {
+            description: 'Sunny symbol, this is the warmest point in the chart.'
+          }
+        }, 23.3, 18.3, 13.9, 9.6]
+
+      }, {
+        name: 'London',
+        marker: {
+          symbol: 'diamond'
+        },
+        data: [{
+          y: 3.9,
+          marker: {
+            symbol: 'url(https://www.highcharts.com/samples/graphics/snow.png)'
+          },
+          accessibility: {
+            description: 'Snowy symbol, this is the coldest point in the chart.'
+          }
+        }, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+      }]
+    });
+  }
+
+}

@@ -15,6 +15,10 @@ export class RegisterPage implements OnInit {
 
   public registerForm: FormGroup;
 
+  public customActionSheetOptions: any = {
+    header: 'Select course type'
+  };
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -35,6 +39,7 @@ export class RegisterPage implements OnInit {
       first_name: [null, [Validators.required, Validators.minLength(5), Validators.maxLength(25)]],
       last_name: [null, [Validators.required, Validators.minLength(5), Validators.maxLength(25)]],
       mobile: [null, [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
+      course_type: [null, Validators.required],
       dob: [null, Validators.required],
       location: this.fb.group({
         address: [null, Validators.required],
@@ -105,6 +110,9 @@ export class RegisterPage implements OnInit {
   }
   get dob() {
     return this.registerForm.get('dob');
+  }
+  get course_type() {
+    return this.registerForm.get('course_type');
   }
 
   get address() {

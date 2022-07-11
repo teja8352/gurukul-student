@@ -5,7 +5,8 @@ import {
   getDownloadURL,
   ref,
   Storage,
-  uploadBytes
+  uploadBytes,
+  getBlob
 } from '@angular/fire/storage';
 
 @Injectable({
@@ -28,6 +29,19 @@ export class StorageService {
   async pushFileToStorage(data: any) {
     const user = this.auth.currentUser;
     const path = `uploads/payments/${data.name}`;
+    const storageRef = ref(this.storage, path);
+    try {
+      await uploadBytes(storageRef, data.file);
+      const fileURL = await getDownloadURL(storageRef);
+      return { file_url: fileURL };
+    } catch (e) {
+      return { error: e };
+    }
+  }
+
+  async uploadAnswer(data: any) {
+    const user = this.auth.currentUser;
+    const path = `uploads/answers/${data.name}`;
     const storageRef = ref(this.storage, path);
     try {
       await uploadBytes(storageRef, data.file);

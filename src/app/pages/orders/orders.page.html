@@ -1,0 +1,36 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Orders
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Courses</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-grid class="">
+    <ion-row class="">
+      <ion-col size="6" size-lg="4" size-xl="3" *ngFor="let order of orders">
+        <ion-card mode="ios" class="ion-no-margin h-100">
+          <ion-card-content>
+            <ion-text color="dark">
+              <p>{{ order.course_name }}</p>
+              <p>{{ order.student_name }}</p>
+              <ion-text [color]="order.status ? 'success' : 'danger'">
+                <p>{{ order.status ? 'Purchased' : 'Pending' }}</p>
+              </ion-text>
+            </ion-text>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

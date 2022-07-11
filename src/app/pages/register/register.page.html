@@ -1,132 +1,158 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Gurukul Student Register</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content color="dark">
+  <ion-header color="dark" class="ion-no-border">
+    <ion-toolbar color="dark" class="ion-text-center">
+      <ion-title>Gurukul Student Register</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <main class="main p-4 pt-5">
+    <ion-text color="white">
+      <p class="size-18 fw-medium m-0">Welcome to</p>
+      <p class="size-48 fw-bold m-0 mb-5" style="line-height: 1.1;">Gurukul</p>
+    </ion-text>
+    <form (submit)="register()" [formGroup]="registerForm">
+      <ion-row>
+        <ion-col size="12">
+          <ion-item input class="ion-margin-bottom" lines="none">
+            <ion-input color="light" type="email" placeholder="Email" formControlName="email"></ion-input>
+            <ion-note slot="error" *ngIf="(email.dirty || email.touched) && email.errors">
+              Email is invalid
+            </ion-note>
+          </ion-item>
+        </ion-col>
 
-<ion-content class="ion-padding">
-  <form (submit)="register()" [formGroup]="registerForm">
-    <ion-row>
-      <ion-col size="12">
+        <ion-col size="6">
+          <ion-item input class="ion-margin-bottom" lines="none">
+            <ion-input color="light" type="text" placeholder="FirstName" formControlName="first_name"></ion-input>
+            <ion-note slot="error" *ngIf="(first_name.dirty || first_name.touched) && first_name.errors">
+              First Name needs to be 5 characters
+            </ion-note>
+          </ion-item>
+        </ion-col>
 
-        <ion-item class="ion-margin-bottom" color="light">
-          <ion-input type="email" placeholder="Email" formControlName="email"></ion-input>
-          <ion-note slot="error" *ngIf="(email.dirty || email.touched) && email.errors">
-            Email is invalid
-          </ion-note>
-        </ion-item>
-      </ion-col>
+        <ion-col size="6">
+          <ion-item input class="ion-margin-bottom" lines="none">
+            <ion-input color="light" type="text" placeholder="Last Name" formControlName="last_name"></ion-input>
+            <ion-note slot="error" *ngIf="(last_name.dirty || last_name.touched) && last_name.errors">
+              Last Name needs to be 5 characters
+            </ion-note>
+          </ion-item>
+        </ion-col>
 
-      <ion-col size="6">
-        <ion-item class="ion-margin-bottom" color="light">
-          <ion-input type="text" placeholder="FirstName" formControlName="first_name"></ion-input>
-          <ion-note slot="error" *ngIf="(first_name.dirty || first_name.touched) && first_name.errors">
-            First Name needs to be 5 characters
-          </ion-note>
-        </ion-item>
-      </ion-col>
+        <ion-col size="12">
+          <ion-item input class="ion-margin-bottom" lines="none">
+            <ion-input color="light" type="password" placeholder="Password" formControlName="password"></ion-input>
+            <ion-note slot="error" *ngIf="(password.dirty || password.touched) && password.errors">
+              Password needs to be 6 characters
+            </ion-note>
+          </ion-item>
+        </ion-col>
 
-      <ion-col size="6">
-        <ion-item class="ion-margin-bottom" color="light">
-          <ion-input type="text" placeholder="Last Name" formControlName="last_name"></ion-input>
-          <ion-note slot="error" *ngIf="(last_name.dirty || last_name.touched) && last_name.errors">
-            Last Name needs to be 5 characters
-          </ion-note>
-        </ion-item>
-      </ion-col>
+        <ion-col size="12">
 
-      <ion-col size="12">
-        <ion-item class="ion-margin-bottom" color="light">
-          <ion-input type="password" placeholder="Password" formControlName="password"></ion-input>
-          <ion-note slot="error" *ngIf="(password.dirty || password.touched) && password.errors">
-            Password needs to be 6 characters
-          </ion-note>
-        </ion-item>
-      </ion-col>
+          <ion-item input class="ion-margin-bottom" lines="none">
+            <ion-input color="light" type="tel" placeholder="Phone Number" formControlName="mobile"></ion-input>
+            <ion-note slot="error" *ngIf="(mobile.dirty || mobile.touched) && mobile.errors">
+              Phone Number needs to be 10 digits.
+            </ion-note>
+          </ion-item>
+        </ion-col>
 
-      <ion-col size="12">
-        <ion-item class="ion-margin-bottom" color="light">
-          <ion-input type="tel" placeholder="Phone Number" formControlName="mobile"></ion-input>
-          <ion-note slot="error" *ngIf="(mobile.dirty || mobile.touched) && mobile.errors">
-            Phone Number needs to be 10 digits.
-          </ion-note>
-        </ion-item>
-      </ion-col>
+        <ion-col size="12">
+          <ion-item input id="start-date" class="ion-margin-bottom">
+            <ion-label color="light">Date of Birth</ion-label>
+            <ion-text slot="end">{{ registerForm.value.dob }}</ion-text>
+            <ion-popover trigger="start-date" show-backdrop="false">
+              <ng-template>
+                <ion-datetime #startDateTime presentation="date" formControlName="dob"
+                  placeholder="select Date of Birth">
+                  <div slot="title">Select Date of Birth</div>
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+            <ion-note slot="error" *ngIf="(dob.dirty || dob.touched) && dob.errors">
+              please enter date of birth
+            </ion-note>
+          </ion-item>
+        </ion-col>
 
-      <ion-col size="12">
-        <ion-item id="start-date" class="ion-margin-bottom" color="light">
-          <ion-label>Date of Birth</ion-label>
-          <ion-text slot="end">{{ registerForm.value.dob }}</ion-text>
-          <ion-popover trigger="start-date" show-backdrop="false">
-            <ng-template>
-              <ion-datetime #startDateTime presentation="date" formControlName="dob" placeholder="select Date of Birth">
-                <div slot="title">Select Date of Birth</div>
-              </ion-datetime>
-            </ng-template>
-          </ion-popover>
-          <ion-note slot="error" *ngIf="(dob.dirty || dob.touched) && dob.errors">
-            please enter date of birth
-          </ion-note>
-        </ion-item>
-      </ion-col>
+        <ion-col size="12">
+          <ion-item input class="ion-margin-bottom" lines="none">
+            <ion-select placeholder="Select course type" interface="action-sheet"
+              [interfaceOptions]="customActionSheetOptions" formControlName="course_type">
+              <!-- ca-foundation, ca-inter, ca-final, cma-foundation, cma-final, cma-inter -->
+              <ion-select-option value="ca-foundation">CA Foundation</ion-select-option>
+              <ion-select-option value="ca-inter">CA Inter</ion-select-option>
+              <ion-select-option value="ca-final">CA Final</ion-select-option>
+              <ion-select-option value="cma-foundation">CMA Foundation</ion-select-option>
+              <ion-select-option value="cma-final">CMA Final</ion-select-option>
+              <ion-select-option value="cma-inter">CMA Inter</ion-select-option>
+            </ion-select>
+            <ion-note slot="error" *ngIf="(course_type.dirty || course_type.touched) && course_type.errors">
+              Please enter course type.
+            </ion-note>
+          </ion-item>
+        </ion-col>
 
-    </ion-row>
+      </ion-row>
 
-    <ion-row formGroupName="location">
-      <ion-col size="6">
-        <ion-item class="ion-margin-bottom" color="light">
-          <ion-input placeholder="Address" formControlName="address"></ion-input>
-          <ion-note slot="error" *ngIf="(address.dirty || address.touched) && address.errors">
-            Address is required
-          </ion-note>
-        </ion-item>
-      </ion-col>
+      <ion-row formGroupName="location">
+        <ion-col size="6">
+          <ion-item input class="ion-margin-bottom" lines="none">
+            <ion-input color="light" placeholder="Address" formControlName="address"></ion-input>
+            <ion-note slot="error" *ngIf="(address.dirty || address.touched) && address.errors">
+              Address is required
+            </ion-note>
+          </ion-item>
+        </ion-col>
 
-      <ion-col size="6">
-        <ion-item class="ion-margin-bottom" color="light">
-          <ion-input type="tel" placeholder="Pincode" formControlName="pincode"></ion-input>
-          <ion-note slot="error" *ngIf="(pincode.dirty || pincode.touched) && pincode.errors">
-            Please enter Pincode.
-          </ion-note>
-        </ion-item>
-      </ion-col>
-      <ion-col size="6">
-        <ion-item class="ion-margin-bottom" color="light">
-          <ion-input type="text" placeholder="City" formControlName="city"></ion-input>
-          <ion-note slot="error" *ngIf="(city.dirty || city.touched) && city.errors">
-            Please enter City.
-          </ion-note>
-        </ion-item>
-      </ion-col>
-      <ion-col size="6">
-        <ion-item class="ion-margin-bottom" color="light">
-          <ion-input type="text" placeholder="State" formControlName="state"></ion-input>
-          <ion-note slot="error" *ngIf="(state.dirty || state.touched) && state.errors">
-            Please enter State.
-          </ion-note>
-        </ion-item>
-      </ion-col>
+        <ion-col size="6">
+          <ion-item input class="ion-margin-bottom" lines="none">
+            <ion-input color="light" type="tel" placeholder="Pincode" formControlName="pincode"></ion-input>
+            <ion-note slot="error" *ngIf="(pincode.dirty || pincode.touched) && pincode.errors">
+              Please enter Pincode.
+            </ion-note>
+          </ion-item>
+        </ion-col>
+        <ion-col size="6">
 
-      <ion-col size="6">
-        <ion-item class="ion-margin-bottom" color="light">
-          <ion-input type="text" readonly placeholder="Country" formControlName="country"></ion-input>
-          <ion-note slot="error" *ngIf="(country.dirty || country.touched) && country.errors">
-            Please enter Country.
-          </ion-note>
-        </ion-item>
-      </ion-col>
+          <ion-item input class="ion-margin-bottom" lines="none">
+            <ion-input color="light" type="text" placeholder="City" formControlName="city"></ion-input>
+            <ion-note slot="error" *ngIf="(city.dirty || city.touched) && city.errors">
+              Please enter City.
+            </ion-note>
+          </ion-item>
+        </ion-col>
+        <ion-col size="6">
+          <ion-item input class="ion-margin-bottom" lines="none">
+            <ion-input color="light" type="text" placeholder="State" formControlName="state"></ion-input>
+            <ion-note slot="error" *ngIf="(state.dirty || state.touched) && state.errors">
+              Please enter State.
+            </ion-note>
+          </ion-item>
+        </ion-col>
 
-      <ion-col size="12">
-        <ion-text>
-          <p class="ion-text-center">Already have an account? <span (click)="login()">
-              <ion-text color="primary"><a>Login here</a></ion-text>
-            </span></p>
-        </ion-text>
-      </ion-col>
+        <ion-col size="6">
+          <ion-item input class="ion-margin-bottom" lines="none">
+            <ion-input color="light" type="text" readonly placeholder="Country" formControlName="country"></ion-input>
+            <ion-note slot="error" *ngIf="(country.dirty || country.touched) && country.errors">
+              Please enter Country.
+            </ion-note>
+          </ion-item>
+        </ion-col>
 
-      <ion-col size="12">
-        <ion-button type="submit" expand="block" [disabled]="!registerForm.valid">Register</ion-button>
-      </ion-col>
-    </ion-row>
-  </form>
+        <ion-col size="12">
+          <ion-text>
+            <p class="ion-text-center">Already have an account? <span (click)="login()">
+                <ion-text color="primary"><a>Login here</a></ion-text>
+              </span>
+            </p>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="12">
+          <ion-button type="submit" expand="block">Register</ion-button>
+        </ion-col>
+      </ion-row>
+    </form>
+  </main>
 </ion-content>

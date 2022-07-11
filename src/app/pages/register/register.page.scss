@@ -1,0 +1,21 @@
+ion-header,
+ion-toolbar {
+    height: 150px;
+}
+
+.main {
+    --border-value: 50px;
+    border-top-left-radius: var(--border-value);
+    border-top-right-radius: var(--border-value);
+    // height: calc(100% - 150px);
+    background: rgba(var(--ion-color-secondary-rgb), 0.3);
+}
+
+ion-item[input] {
+    --background: rgba(var(--ion-color-light-rgb), 0.5) !important;
+}
+
+.sc-ion-input-md-h {
+    --placeholder-color: var(--ion-color-white) !important;
+
+}

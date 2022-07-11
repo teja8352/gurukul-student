@@ -32,6 +32,8 @@
             ],
             "styles": [
               "src/theme/variables.scss",
+              "src/theme/fonts.scss",
+              "src/theme/utils.scss",
               "src/theme/styles.scss",
               "src/global.scss"
             ],

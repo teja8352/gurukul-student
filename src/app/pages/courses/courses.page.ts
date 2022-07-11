@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { DocumentReference, DocumentData } from '@angular/fire/firestore';
 import { AlertController } from '@ionic/angular';
-import { Course } from 'src/app/models/course.interface';
+import { Course, Order } from 'src/app/models/course.interface';
+import { Student } from 'src/app/models/student.interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CommonService } from 'src/app/services/common/common.service';
 import { StateService } from 'src/app/services/state/state.service';
@@ -14,6 +17,8 @@ import { DataService } from '../../services/data/data.service';
 export class CoursesPage implements OnInit {
 
   public courses: Course[] = [];
+  public student: Student;
+
   constructor(
     private dataService: DataService,
     private cd: ChangeDetectorRef,
@@ -26,6 +31,11 @@ export class CoursesPage implements OnInit {
       this.courses = res;
       this.cd.detectChanges();
     });
+    this.dataService.getStudentById(localStorage.getItem('uid') || '').subscribe((resp: any) => {
+      this.student = resp[0];
+      localStorage.setItem('student', JSON.stringify(this.student));
+      this.cd.detectChanges();
+    });
   }
 
   ngOnInit() {
@@ -36,4 +46,32 @@ export class CoursesPage implements OnInit {
     this.commonService.navigateForward('tests');
   }
 
+  buyCourse(course: Course) {
+    const payload: Order = {
+      course_id: course?.id,
+      course_name: course?.title,
+      student_id: localStorage.getItem('uid') || this.student.id,
+      student_name: this.student.first_name + ' ' + this.student.last_name,
+      status: false
+    };
+    this.dataService.getOrders(payload).then((res: any) => {
+      if (res?.size > 0) {
+        this.commonService.navigateForward('payment');
+      } else {
+        this.dataService.addOrder(payload).then((resp: DocumentReference<DocumentData>) => {
+          if (resp.id) {
+            this.stateService.setData('order_id', resp.id);
+            localStorage.setItem('order_id', resp.id);
+            this.commonService.navigateForward('payment');
+          }
+        }, err => {
+          console.error('Error while adding the order:::::\n', err);
+          this.commonService.presentToast('Unable to create order', 'danger');
+        });
+      }
+    }, err => {
+      console.error('Error while checking the order:::::\n', err);
+      this.commonService.presentToast('Unable to check order', 'danger');
+    });
+  }
 }

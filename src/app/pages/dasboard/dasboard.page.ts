@@ -16,7 +16,8 @@ export class DasboardPage implements OnInit {
     private router: Router,
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
 
   navTo(path: string) {
     this.commonService.navigateForward(path);

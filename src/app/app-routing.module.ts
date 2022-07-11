@@ -44,6 +44,31 @@ const routes: Routes = [
     ...canActivate(redirectUnauthorizedToLogin)
   },
   {
+    path: 'orders',
+    loadChildren: () => import('./pages/orders/orders.module').then(m => m.OrdersPageModule),
+    ...canActivate(redirectUnauthorizedToLogin)
+  },
+  {
+    path: 'purchased-courses',
+    loadChildren: () => import('./pages/purchased-courses/purchased-courses.module').then(m => m.PurchasedCoursesPageModule),
+    ...canActivate(redirectUnauthorizedToLogin)
+  },
+  {
+    path: 'purchased-tests',
+    loadChildren: () => import('./pages/purchased-tests/purchased-tests.module').then(m => m.PurchasedTestsPageModule),
+    ...canActivate(redirectUnauthorizedToLogin)
+  },
+  {
+    path: 'test',
+    loadChildren: () => import('./pages/test/test.module').then(m => m.TestPageModule),
+    ...canActivate(redirectUnauthorizedToLogin)
+  },
+  {
+    path: 'progress',
+    loadChildren: () => import('./pages/progress/progress.module').then(m => m.ProgressPageModule),
+    ...canActivate(redirectUnauthorizedToLogin)
+  },
+  {
     path: '',
     redirectTo: '/login',
     pathMatch: 'full',

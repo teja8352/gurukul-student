@@ -13,6 +13,7 @@ import { CommonService } from 'src/app/services/common/common.service';
 export class LoginPage implements OnInit {
 
   public loginForm: FormGroup;
+  public isPasswordVisible: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -39,7 +40,7 @@ export class LoginPage implements OnInit {
   }
 
   async login() {
-    const loading = await this.loadingController.create();
+    const loading = await this.loadingController.create({ message: 'signing' });
     await loading.present();
 
     const user = await this.authService.login(this.loginForm.value);
@@ -58,6 +59,10 @@ export class LoginPage implements OnInit {
     } else {
       this.showAlert('Login failed', 'Please try again!');
     }
+  }
+
+  showPassword() {
+    this.isPasswordVisible = !this.isPasswordVisible;
   }
 
   async showAlert(header, message) {

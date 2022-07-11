@@ -1,0 +1,181 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="purchased-tests"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      {{test?.title || 'Test'}}
+    </ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment value="all" color="medium" scrollable="true" mode="md" [(ngModel)]="segment"
+      (ionChange)="segmentChanged($event)">
+
+      <ion-segment-button value="content">
+        <ion-label>Content</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="answers">
+        <ion-label>Answers</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="review-comments">
+        <ion-label>Review Comments</ion-label>
+      </ion-segment-button>
+
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div [ngSwitch]="segment">
+
+    <div *ngSwitchCase="'content'">
+      <ion-list lines="none">
+        <ion-row class="ion-margin-top">
+          <ion-col size="6" size-lg="4" size-xl="3" *ngFor="let file of test?.file_urls" class="ion-margin-bottom">
+            <ion-card class="h-100 ion-no-margin file" color="white" (click)="download(file)">
+              <div class="file-type d-grid-center">
+                <img *ngIf="file.type === 'image'" [src]="file.file_url" load="lazy" />
+                <div *ngIf="file.type === 'audio'">
+                  <ion-icon color="medium" name="play-circle-outline"></ion-icon>
+                  <ion-icon color="medium" name="pause-circle-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'video'">
+                  <ion-icon color="medium" name="film-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'pdf'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'txt'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'docx'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'xlsx'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'ppt'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'archive'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+              </div>
+              <div class="file-name">
+                <ion-text>
+                  {{file.name}}
+                </ion-text>
+              </div>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-list>
+    </div>
+
+    <div *ngSwitchCase="'answers'">
+      <ion-list lines="none">
+        <ion-row class="ion-margin-top">
+          <ion-col size="6" size-lg="4" size-xl="3" *ngFor="let file of test?.answers" class="ion-margin-bottom">
+            <ion-card class="h-100 ion-no-margin file" color="white" (click)="download(file)">
+              <div class="file-type d-grid-center">
+                <img *ngIf="file.type === 'image'" [src]="file.file_url" load="lazy" />
+                <div *ngIf="file.type === 'audio'">
+                  <ion-icon color="medium" name="play-circle-outline"></ion-icon>
+                  <ion-icon color="medium" name="pause-circle-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'video'">
+                  <ion-icon color="medium" name="film-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'pdf'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'txt'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'docx'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'xd'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'xlsx'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'ppt'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'archive'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+              </div>
+              <div class="file-name">
+                <ion-text>
+                  {{file.name}}
+                </ion-text>
+              </div>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-list>
+    </div>
+
+    <div *ngSwitchCase="'review-comments'">
+      <ion-list lines="none">
+        <ion-row class="ion-margin-top">
+          <ion-col size="6" size-lg="4" size-xl="3" *ngFor="let file of test?.reviews" class="ion-margin-bottom">
+            <ion-card class="h-100 ion-no-margin file" color="white" (click)="download(file)">
+              <div class="file-type d-grid-center">
+                <img *ngIf="file.type === 'image'" [src]="file.file_url" load="lazy" />
+                <div *ngIf="file.type === 'audio'">
+                  <ion-icon color="medium" name="play-circle-outline"></ion-icon>
+                  <ion-icon color="medium" name="pause-circle-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'video'">
+                  <ion-icon color="medium" name="film-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'pdf'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'txt'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'docx'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'xd'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'xlsx'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'ppt'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+                <div *ngIf="file.type === 'archive'">
+                  <ion-icon color="medium" name="document-text-outline"></ion-icon>
+                </div>
+              </div>
+              <div class="file-name">
+                <ion-text>
+                  {{file.name}}
+                </ion-text>
+              </div>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-list>
+    </div>
+  </div>
+
+</ion-content>
+
+<ion-footer *ngIf="segment === 'answers'">
+  <ion-toolbar>
+    <input type="file" #f id="fileInput" (change)="fileSelected($event)" />
+    <ion-button for="fileInput" expand="full" class="ion-no-margin" size="large" (click)="f.click()">
+      <span style="font-size: 14px">Upload Answer</span>
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

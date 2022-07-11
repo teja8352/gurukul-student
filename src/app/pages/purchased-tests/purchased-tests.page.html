@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="courses"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Tests
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Tests</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-grid class="">
+    <ion-row class="">
+      <ion-col size="6" size-lg="4" size-xl="3" *ngFor="let test of tests">
+        <ion-card mode="ios" class="ion-no-margin h-100" (click)="openTest(test)">
+          <ion-card-content>
+            <ion-text color="dark">
+              <p>{{ test.title }}</p>
+            </ion-text>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

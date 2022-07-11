@@ -2,3 +2,8 @@
     padding: 12px;
     --border-radius: 5px;
 }
+
+input[type="file"] {
+    position: absolute;
+    opacity: 0;
+}
