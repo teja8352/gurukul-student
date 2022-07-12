@@ -15,6 +15,8 @@ import { provideStorage, getStorage } from '@angular/fire/storage';
 import { Capacitor } from '@capacitor/core';
 import { indexedDBLocalPersistence, initializeAuth } from 'firebase/auth';
 import { getApp } from 'firebase/app';
+// import { QuillModule } from 'ngx-quill';
+import { QuillConfigModule } from 'ngx-quill/config';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,6 +26,13 @@ import { getApp } from 'firebase/app';
       backButtonIcon: 'chevron-back-outline',
       swipeBackEnabled: false,
       _forceStatusbarPadding: true
+    }),
+    // QuillModule.forRoot(),
+    QuillConfigModule.forRoot({
+      modules: {
+        syntax: true,
+        toolbar: []
+      }
     }),
     AppRoutingModule,
     HttpClientModule,

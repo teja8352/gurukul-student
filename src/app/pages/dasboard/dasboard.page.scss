@@ -1,10 +1,28 @@
-.dashboard {
+.dashboard-header {
+    height: 150px;
+}
 
+.action-btn {
+    --border-radius: 8px !important;
+    margin-right: 8px;
+}
+
+.notification-count {
+    top: -5px;
+    left: 87px;
+    z-index: 99;
+}
+
+.dashboard {
+    background: rgba(var(--ion-color-secondary-rgb), 0.5);
     min-height: 120px;
-    p {
-        font-size: 20px;
-        font-weight: bold;
-        color: var(--ion-color-dark);
-        margin: 0;
-    }
+}
+
+.main {
+    --border-value: 50px;
+    border-top-left-radius: var(--border-value);
+    border-top-right-radius: var(--border-value);
+    min-height: calc(100% - 150px);
+    height: fit-content;
+    background: rgba(var(--ion-color-secondary-rgb), 0.3);
 }
