@@ -78,6 +78,18 @@ const routes: Routes = [
     redirectTo: '',
     pathMatch: 'full',
   },
+  {
+    path: 'summay-of-concepts',
+    loadChildren: () => import('./pages/summay-of-concepts/summay-of-concepts.module').then( m => m.SummayOfConceptsPageModule)
+  },
+  {
+    path: 'question-papers',
+    loadChildren: () => import('./pages/question-papers/question-papers.module').then( m => m.QuestionPapersPageModule)
+  },
+  {
+    path: 'schedule',
+    loadChildren: () => import('./pages/schedule/schedule.module').then( m => m.SchedulePageModule)
+  },
 ];
 
 @NgModule({
