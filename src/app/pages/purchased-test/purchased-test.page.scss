@@ -1,0 +1,39 @@
+#fileInput,
+#uploadReview {
+    position: absolute;
+    opacity: 0;
+}
+
+ion-avatar {
+    background: var(--ion-color-light);
+}
+
+.zoom-btns {
+    bottom: 20px;
+    right: 20px;
+    z-index: 99;
+    background: var(--ion-color-light);
+}
+
+.file {
+    .file-type {
+        height: 120px;
+        background-color: var(--ion-color-light);
+
+        img {
+            width: 100%;
+            height: 120px;
+        }
+
+        ion-icon {
+            font-size: 42px;
+        }
+    }
+
+    .file-name {
+        padding: 8px;
+        background-color: var(--ion-color-white);
+        position: relative;
+        z-index: 9;
+    }
+}

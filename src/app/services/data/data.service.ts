@@ -74,7 +74,7 @@ export class DataService {
 
   getPurchasedOrders(): Observable<Order[]> {
     const ordersRef = collection(this.firestore, 'orders');
-    const orderQueryRef = query(ordersRef, where('student_id', '==', localStorage.getItem('uid') || ''), where('status', '==', true));
+    const orderQueryRef = query(ordersRef, where('student_id', '==', localStorage.getItem('student_id') || ''), where('status', '==', true));
     return collectionData(orderQueryRef, { idField: 'id' }) as Observable<Order[]>;
   }
 
@@ -98,10 +98,18 @@ export class DataService {
   /**
    * @description Student Data
    */
-  getStudentById(id): Observable<Student[]> {
-    const studentDocRef = collection(this.firestore, 'students',);
-    const studentQueryRef = query(studentDocRef, where('uid', '==', id || ''));
-    return collectionData(studentQueryRef, { idField: 'id' }) as Observable<Student[]>;
+  getStudentById(id): Observable<Student> {
+    // const studentDocRef = collection(this.firestore, 'students',);
+    // const studentQueryRef = query(studentDocRef, where('id', '==', id || ''));
+    // return collectionData(studentQueryRef, { idField: 'id' }) as Observable<Student[]>;
+    const studentDocRef = doc(this.firestore, `students/${id}`);
+    return docData(studentDocRef, { idField: 'id' }) as Observable<Student>;
+  }
+
+  getStudent(data: any): Observable<Student[]> {
+    const ordersRef = collection(this.firestore, 'students');
+    const orderQueryRef = query(ordersRef, where('email', '==', data.email || ''), where('password', '==', data.password || ''));
+    return collectionData(orderQueryRef, { idField: 'id' }) as Observable<Student[]>;
   }
 
   addStudent(student: Student): DocumentData {
