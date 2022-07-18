@@ -1,6 +1,6 @@
-<ion-content color="dark">
-  <ion-header color="dark" class="ion-no-border">
-    <ion-toolbar color="dark" class="ion-text-center">
+<ion-content color="white">
+  <ion-header color="white" class="ion-no-border">
+    <ion-toolbar color="white" class="ion-text-center">
       <ion-title>Gurukul Student Login</ion-title>
     </ion-toolbar>
   </ion-header>
@@ -11,22 +11,22 @@
     </ion-text>
     <form (submit)="login()" [formGroup]="loginForm">
       <ion-item input class="ion-margin-bottom" lines="none">
-        <ion-icon name="mail-outline" slot="start" color="light"></ion-icon>
-        <ion-input color="light" type="email" placeholder="Email" formControlName="email"></ion-input>
+        <ion-icon name="mail-outline" slot="start" color="dark"></ion-icon>
+        <ion-input color="dark" type="email" placeholder="Email" formControlName="email"></ion-input>
         <ion-note slot="error" *ngIf="(email.dirty || email.touched) && email.errors">
           Email is invalid
         </ion-note>
       </ion-item>
       <ion-item input class="ion-margin-bottom" lines="none">
-        <ion-icon color="light" name="lock-closed-outline" slot="start"></ion-icon>
-        <ion-input color="light" [type]="isPasswordVisible ? 'text' : 'password'" placeholder="Password"
+        <ion-icon color="dark" name="lock-closed-outline" slot="start"></ion-icon>
+        <ion-input color="dark" [type]="isPasswordVisible ? 'text' : 'password'" placeholder="Password"
           formControlName="password"></ion-input>
         <ion-buttons slot="end">
           <ion-button [hidden]="!isPasswordVisible" (click)="showPassword()">
-            <ion-icon color="light" name="eye-outline" slot="icon-only"> </ion-icon>
+            <ion-icon color="dark" name="eye-outline" slot="icon-only"> </ion-icon>
           </ion-button>
           <ion-button [hidden]="isPasswordVisible" (click)="showPassword()">
-            <ion-icon color="light" name="eye-off-outline" slot="icon-only"> </ion-icon>
+            <ion-icon color="dark" name="eye-off-outline" slot="icon-only"> </ion-icon>
           </ion-button>
         </ion-buttons>
         <ion-note slot="error" *ngIf="(password.dirty || password.touched) && password.errors">
@@ -34,18 +34,19 @@
         </ion-note>
       </ion-item>
       <ion-item class="ion-margin-bottom bg-transparent" lines="none">
-        <ion-label class="ion-text-end" color="white">
+        <ion-label class="ion-text-end" color="dark">
           Forgot Password?
         </ion-label>
       </ion-item>
 
-      <ion-button type="submit" expand="block" class="shadow" [disabled]="!loginForm.valid">Log in</ion-button>
+      <ion-button type="submit" expand="block" class="shadow" color="dark" [disabled]="!loginForm.valid">
+        Log in
+      </ion-button>
 
       <p class="ion-text-center mt-6">
-        <ion-text color="light">
-          Don't have an account? <span>
-            <ion-text color="primary"><a (click)="register()">Create one</a></ion-text>
-          </span>
+        <ion-text color="dark">
+          Don't have an account? <a style="color: var(--ion-color-white) !important;" (click)="register()">Create
+            one</a>
         </ion-text>
       </p>
     </form>

@@ -23,8 +23,8 @@ export class AccountPage implements OnInit {
     private loadingCtrl: LoadingController,
     private commonService: CommonService
   ) {
-    this.dataService.getStudentById(localStorage.getItem('uid') || '').subscribe((resp: any) => {
-      this.student = resp[0];
+    this.dataService.getStudentById(localStorage.getItem('student_id') || '').subscribe((resp: any) => {
+      this.student = resp;
       this.cd.detectChanges();
     });
   }

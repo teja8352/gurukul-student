@@ -22,6 +22,7 @@ import { QuillConfigModule } from 'ngx-quill/config';
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    HttpClientModule,
     IonicModule.forRoot({
       backButtonIcon: 'chevron-back-outline',
       swipeBackEnabled: false,

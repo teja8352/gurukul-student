@@ -19,6 +19,7 @@ import {
   QuerySnapshot
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { FirebaseCollections } from 'src/app/constants/fb-collections';
 import { Course, Order, Test } from 'src/app/models/course.interface';
 import { Student } from 'src/app/models/student.interface';
 
@@ -56,6 +57,18 @@ export class DataService {
   getTestById(id): Observable<Test> {
     const testDocRef = doc(this.firestore, `tests/${id}`);
     return docData(testDocRef, { idField: 'id' }) as Observable<Test>;
+  }
+
+  getScheduleByTestId(testId: string): Observable<any[]> {
+    const scheduleRef = collection(this.firestore, FirebaseCollections.SCHEDULES);
+    const scheduleQueryRef = query(scheduleRef, where('test_id', '==', testId || ''));
+    return collectionData(scheduleQueryRef, { idField: 'id' }) as Observable<any[]>;
+  }
+
+  getQuestionPaperByTestId(testId: string): Observable<any[]> {
+    const questionPapersRef = collection(this.firestore, FirebaseCollections.QUESTION_PAPERS);
+    const questionPapersQueryRef = query(questionPapersRef, where('test_id', '==', testId || ''));
+    return collectionData(questionPapersQueryRef, { idField: 'id' }) as Observable<any[]>;
   }
 
   updateTest(test: Test) {

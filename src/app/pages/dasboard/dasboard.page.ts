@@ -10,6 +10,8 @@ import { CommonService } from 'src/app/services/common/common.service';
 })
 export class DasboardPage implements OnInit {
 
+  public student: any = {};
+
   constructor(
     private commonService: CommonService,
     private authService: AuthService,
@@ -19,15 +21,16 @@ export class DasboardPage implements OnInit {
   ngOnInit() {
   }
 
+  ionViewWillEnter() {
+    this.student = localStorage.getItem('student');
+  }
+
   navTo(path: string) {
     this.commonService.navigateForward(path);
   }
 
   logout() {
-    this.authService.logout().then(() => {
-      this.router.navigateByUrl('/login', { replaceUrl: true });
-    }, err => {
-      console.error('Error while logout:::::::\n', err);
-    });
+    localStorage.clear();
+    this.router.navigateByUrl('login', { replaceUrl: true });
   }
 }

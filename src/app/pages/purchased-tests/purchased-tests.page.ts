@@ -31,6 +31,6 @@ export class PurchasedTestsPage implements OnInit {
 
   openTest(test: Test) {
     this.stateService.setData('test', test);
-    this.commonService.navigateForward('test');
+    this.commonService.navigateForward('purchased-test');
   }
 }

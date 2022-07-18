@@ -1,7 +1,7 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="tests"></ion-back-button>
+      <ion-back-button icon="chevron-back-outline" defaultHref="tests"></ion-back-button>
     </ion-buttons>
     <ion-title>
       Payment
@@ -16,13 +16,21 @@
     <ion-note slot="end" color="danger">XXXXXX</ion-note>
   </ion-item>
   <ion-item>
-    <ion-label>Net Banking</ion-label>
-    <ion-note slot="end" color="danger">XXXXXXXXXXXX</ion-note>
-    <ion-note slot="end" color="danger">XXXXXX</ion-note>
-    <ion-note slot="end" color="danger">XXXXXXXX</ion-note>
+    <ion-label>
+      <h2>Net Banking</h2>
+      <ion-note color="danger">
+        XXXXXXXXXXXX<br />
+        XXXXXX<br />
+        XXXXXXXX
+      </ion-note>
+    </ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label>Contact US</ion-label>
+    <ion-note slot="end" color="danger">+91-9988776655</ion-note>
   </ion-item>
 
-  <ion-item lines="none" color="light" class="url">
+  <ion-item lines="none" color="light" class="url" *ngIf="uploadedURL">
     <ion-label>
       <ion-text>
         {{uploadedURL || 1234}}
@@ -40,7 +48,7 @@
   <ion-toolbar>
     <input type="file" #f id="fileInput" (change)="fileSelected($event)" />
     <ion-button for="fileInput" expand="full" class="ion-no-margin" size="large" (click)="f.click()">
-      <span style="font-size: 14px">Payment Completed</span>
+      <span style="font-size: 14px">Upload payment acknowledgement</span>
     </ion-button>
   </ion-toolbar>
 </ion-footer>

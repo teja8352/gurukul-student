@@ -38,8 +38,7 @@ export class CoursesPage implements OnInit {
     });
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   openCourse(course: Course) {
     this.stateService.setData('course', course);
@@ -47,28 +46,25 @@ export class CoursesPage implements OnInit {
   }
 
   buyCourse(course: Course) {
-    console.log("course and student::::::::",course,this.student,localStorage.getItem('student_id'))
     const payload: Order = {
       course_id: course?.id,
       course_name: course?.title,
+      course_desc: course?.description,
       student_id: localStorage.getItem('student_id') || this.student.id,
       student_name: this.student.first_name + ' ' + this.student.last_name,
       status: false
     };
-    console.log("payload::::::",payload)
     this.dataService.getOrders(payload).then((res: any) => {
       if (res?.size > 0) {
-        console.log("resp",res)
         this.commonService.navigateForward('payment');
       } else {
         this.dataService.addOrder(payload).then((resp: DocumentReference<DocumentData>) => {
           if (resp.id) {
-            console.log("resp",res)
             this.stateService.setData('order_id', resp.id);
             localStorage.setItem('order_id', resp.id);
             this.commonService.navigateForward('payment');
           }
-        }, err => {
+        }, (err: any) => {
           console.error('Error while adding the order:::::\n', err);
           this.commonService.presentToast('Unable to create order', 'danger');
         });

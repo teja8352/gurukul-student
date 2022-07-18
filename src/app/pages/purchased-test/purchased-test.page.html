@@ -1,12 +1,12 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="gurukul/courses/tests"></ion-back-button>
+      <ion-back-button icon="chevron-back-outline" defaultHref="purchased-tests"></ion-back-button>
     </ion-buttons>
     <ion-title>{{test?.title || 'Test'}}</ion-title>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-segment value="all" color="medium" scrollable="true" mode="md" [(ngModel)]="segment">
+    <ion-segment color="medium" mode="md" [(ngModel)]="segment" scrollable>
 
       <ion-segment-button value="schedule">
         <ion-label>Schedule</ion-label>
@@ -20,16 +20,15 @@
         <ion-label>Summary of Concepts</ion-label>
       </ion-segment-button>
 
-      <!-- <ion-segment-button value="review-comments">
-        <ion-label>Review Comments</ion-label>
-      </ion-segment-button> -->
+      <ion-segment-button value="test-results">
+        <ion-label>Test Results</ion-label>
+      </ion-segment-button>
 
     </ion-segment>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
   <div *ngIf="segment === 'schedule'" class="w-100 h-100 position-relative">
     <p class="size-14 fw-bold m-0 p-3 ion-border" style="background: var(--ion-color-light);">
       {{schedule?.name || 'Schedule Name'}}
@@ -42,16 +41,50 @@
     <ion-buttons class="position-absolute zoom-btns rounded-pill shadow"
       *ngIf="schedule !== undefined && schedule !== null">
       <ion-button (click)="zoomIn()">
-        <ion-icon slot="icon-only" class="size-48" name="add-circle-outline"></ion-icon>
+        <ion-icon slot="icon-only" color="dark" class="size-48" name="add-circle-outline"></ion-icon>
       </ion-button>
       <ion-button (click)="zoomOut()">
-        <ion-icon slot="icon-only" class="size-48" name="remove-circle-outline"></ion-icon>
+        <ion-icon slot="icon-only" color="dark" class="size-48" name="remove-circle-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </div>
 
-  <div *ngIf="segment === 'question-papers'" class="w-100 h-100 position-relative">
-    <p class="size-14 fw-bold m-0 p-3 ion-border" style="background: var(--ion-color-light);">
+  <div *ngIf="segment === 'question-papers'" class="w-100 h-100 p-3">
+    <ion-row>
+      <ion-col size="6" size-lg="4" size-xl="3">
+        <ion-card class="p-3 m-0 h-100 ion-activatable" mode="ios" (click)="downloadQuestionPaper()">
+          <ion-ripple-effect></ion-ripple-effect>
+          <ion-icon class="size-32" color="tertiary" name="cloud-download-outline"></ion-icon>
+          <p class="size-16 fw-medium m-0 mt-3">Download Question Paper</p>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6" size-lg="4" size-xl="3">
+        <ion-card class="p-3 m-0 h-100 ion-activatable" mode="ios">
+          <ion-ripple-effect></ion-ripple-effect>
+          <ion-icon class="size-32" color="tertiary" name="cloud-upload-outline"></ion-icon>
+          <p class="size-16 fw-medium m-0 mt-3">Upload Answer sheet</p>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6" size-lg="4" size-xl="3">
+        <ion-card class="p-3 m-0 h-100 ion-activatable" mode="ios" (click)="downloadValuesAnswerSheet()">
+          <ion-ripple-effect></ion-ripple-effect>
+          <ion-icon class="size-32" color="tertiary" name="cloud-download-outline"></ion-icon>
+          <p class="size-16 fw-medium m-0 mt-3">Download Valued Answer sheet</p>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12">
+        <ion-card mode="ios" class="m-0 mt-3">
+          <ion-card-header>
+            Evaluator's Remarks
+          </ion-card-header>
+          <ion-card-content>
+            <div [innerHTML]="review"></div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <!-- <p class="size-14 fw-bold m-0 p-3 ion-border" style="background: var(--ion-color-light);">
       {{questionPaper?.name || 'Question Paper'}}
     </p>
     <pdf-viewer [src]="questionPaper?.file_url" (page)="0" [zoom]="zoom" (page-rendered)="pageRendered($event)"
@@ -62,90 +95,22 @@
     <ion-buttons class="position-absolute zoom-btns rounded-pill shadow"
       *ngIf="questionPaper !== undefined && questionPaper !== null">
       <ion-button (click)="zoomIn()">
-        <ion-icon slot="icon-only" class="size-48" name="add-circle-outline"></ion-icon>
+        <ion-icon slot="icon-only" color="dark" class="size-48" name="add-circle-outline"></ion-icon>
       </ion-button>
       <ion-button (click)="zoomOut()">
-        <ion-icon slot="icon-only" class="size-48" name="remove-circle-outline"></ion-icon>
+        <ion-icon slot="icon-only" color="dark" class="size-48" name="remove-circle-outline"></ion-icon>
       </ion-button>
-    </ion-buttons>
+    </ion-buttons> -->
   </div>
-
-  <!-- <div *ngIf="segment === 'summary-of-concepts'">
-  </div> -->
 
 
   <div *ngIf="segment === 'summary-of-concepts'">
-
     <ion-list lines="none">
-
-      <!-- <ion-list-header color="light">
-        <ion-label>Test Name</ion-label>
-      </ion-list-header>
-      <ion-item>
-        <ion-label class="ion-text-wrap">
-          {{test?.title}}
-        </ion-label>
-      </ion-item>
-
-      <ion-list-header color="light">
-        <ion-label>Description</ion-label>
-      </ion-list-header>
-      <ion-item>
-        <ion-label class="ion-text-wrap">
-          {{test?.description || "Test description will come here"}}
-        </ion-label>
-      </ion-item>
-
-      <ion-list-header color="light">
-        <ion-label>Timings</ion-label>
-      </ion-list-header>
-      <ion-item>
-        <ion-label class="ion-text-wrap">
-          From
-          <strong>
-            {{test?.start_date | date: "dd-MMM-YYYY hh:mm a"}}
-          </strong>
-          to
-          <strong>
-            {{test?.end_date| date: "dd-MMM-YYYY hh:mm a"}}
-          </strong>
-        </ion-label>
-      </ion-item> -->
-
-
-      <!-- <ion-list-header color="light">
-        <ion-label>Documents</ion-label>
-      </ion-list-header> -->
       <ion-row class="ion-margin-top">
         <ion-col size="6" size-lg="4" size-xl="3" *ngFor="let file of test?.file_urls" class="ion-margin-bottom">
           <ion-card class="h-100 ion-no-margin file" color="white">
             <div class="file-type d-grid-center" (click)="playVideo(file.file_url)">
-              <img *ngIf="file.type === 'image'" [src]="file.file_url" load="lazy" />
-              <!-- <div *ngIf="file.type === 'audio'">
-                <ion-icon color="medium" name="play-circle-outline"></ion-icon>
-                <ion-icon color="medium" name="pause-circle-outline"></ion-icon>
-              </div> -->
-              <div *ngIf="file.type === 'video'">
-                <ion-icon color="medium" name="film-outline"></ion-icon>
-              </div>
-              <!-- <div *ngIf="file.type === 'pdf'">
-                <ion-icon color="medium" name="document-text-outline"></ion-icon>
-              </div>
-              <div *ngIf="file.type === 'txt'">
-                <ion-icon color="medium" name="document-text-outline"></ion-icon>
-              </div>
-              <div *ngIf="file.type === 'docx'">
-                <ion-icon color="medium" name="document-text-outline"></ion-icon>
-              </div>
-              <div *ngIf="file.type === 'xlsx'">
-                <ion-icon color="medium" name="document-text-outline"></ion-icon>
-              </div>
-              <div *ngIf="file.type === 'ppt'">
-                <ion-icon color="medium" name="document-text-outline"></ion-icon>
-              </div>
-              <div *ngIf="file.type === 'archive'">
-                <ion-icon color="medium" name="document-text-outline"></ion-icon>
-              </div> -->
+              <ion-icon color="medium" name="film-outline"></ion-icon>
             </div>
             <div class="file-name">
               <ion-text>
@@ -242,7 +207,7 @@
     </ion-list>
   </div>
 
-  <div *ngIf="segment === 'review-comments'">
+  <div *ngIf="segment === 'test-results'">
     <ion-list lines="none">
       <ion-row class="ion-margin-top">
         <ion-col size="6" size-lg="4" size-xl="3" *ngFor="let file of test?.reviews" class="ion-margin-bottom">
@@ -290,38 +255,11 @@
   </div>
 </ion-content>
 
-<ion-footer *ngIf="segment === 'summary-of-concepts'">
-  <ion-toolbar>
-    <input type="file" #f id="fileInput" (change)="fileSelected($event)" accept="video/mp4,video/x-m4v,video/*" />
-    <ion-button for="fileInput" expand="full" class="ion-no-margin" size="large" (click)="f.click()">
-      <span style="font-size: 14px">Upload summary of concept</span>
-    </ion-button>
-  </ion-toolbar>
-</ion-footer>
-
 <ion-footer *ngIf="segment === 'review-comments'">
   <ion-toolbar>
     <input type="file" #f id="fileInput" (change)="fileSelected($event)" />
     <ion-button for="fileInput" expand="full" class="ion-no-margin" size="large" (click)="f.click()">
       <span style="font-size: 14px">Upload Review</span>
-    </ion-button>
-  </ion-toolbar>
-</ion-footer>
-
-<ion-footer *ngIf="segment === 'schedule'">
-  <ion-toolbar>
-    <input type="file" #f id="fileInput" (change)="uploadSchedule($event)" accept="application/pdf" />
-    <ion-button for="fileInput" expand="full" class="ion-no-margin" size="large" (click)="f.click()">
-      <span style="font-size: 14px">Upload Schedule</span>
-    </ion-button>
-  </ion-toolbar>
-</ion-footer>
-
-<ion-footer *ngIf="segment === 'question-papers'">
-  <ion-toolbar>
-    <input type="file" #f id="fileInput" (change)="uploadQuestionPaper($event)" accept="application/pdf" />
-    <ion-button for="fileInput" expand="full" class="ion-no-margin" size="large" (click)="f.click()">
-      <span style="font-size: 14px">Upload Question Paper</span>
     </ion-button>
   </ion-toolbar>
 </ion-footer>

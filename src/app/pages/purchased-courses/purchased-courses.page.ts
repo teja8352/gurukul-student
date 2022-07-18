@@ -23,7 +23,6 @@ export class PurchasedCoursesPage implements OnInit {
     private authService: AuthService
   ) {
     this.dataService.getPurchasedOrders().subscribe(res => {
-      console.log(res);
       this.orders = res;
       this.cd.detectChanges();
     });
@@ -33,7 +32,6 @@ export class PurchasedCoursesPage implements OnInit {
   }
 
   openCourse(course: Order) {
-    console.log("course:::::::",course)
     const courseData: Course = {
       id: course?.course_id,
       title: course?.course_name,

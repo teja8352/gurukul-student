@@ -1,25 +1,23 @@
-<ion-content color="dark">
-  <div class="dashboard-header pl-3 pt-4">
-    <ion-item class="bg-transparent">
-      <ion-avatar slot="start">
+<ion-content color="white">
+  <div class="dashboard-header pl-3 pt-5">
+    <ion-item class="bg-transparent" lines="none">
+      <ion-avatar slot="start" class="shadow">
         <ion-img src="https://www.dccomics.com/sites/default/files/Char_Gallery_Flash_758_6055049612af35.61135649.jpg">
         </ion-img>
       </ion-avatar>
-      <ion-label color="white">
-        <h2 class="size-22 fw-bold">K Teja</h2>
-        <p class="size-14" style="color: var(--ion-color-light);">
-          Roll No.: STD001
+      <ion-label color="dark">
+        <h2 class="size-22 fw-bold">{{student.first_name}} {{student.last_name}}</h2>
+        <p class="size-14" style="color: var(--ion-color-medium);">
+          Roll No.: {{student.id}}
         </p>
       </ion-label>
-      <ion-buttons slot="error">
-        <ion-badge class="position-absolute notification-count">5</ion-badge>
-        <ion-button size="small" fill="solid" color="tertiary" class="action-btn size-12 position-relative">
-          Notification
-        </ion-button>
-        <ion-button size="small" fill="solid" color="danger" class="action-btn size-12" (click)="logout()">
-          <ion-text color="white">
-            Logout
-          </ion-text>
+      <ion-buttons slot="end">
+        <!-- <ion-button color="tertiary" class="action-btn size-12 position-relative">
+          <ion-badge class="position-absolute notification-count">5</ion-badge>
+          <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
+        </ion-button> -->
+        <ion-button color="danger" class="action-btn size-12" (click)="logout()">
+          <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-item>
@@ -27,45 +25,46 @@
   <main class="main p-4 pt-5">
     <ion-row>
       <ion-col size="12" size-lg="4" size-xl="3" class="ion-margin-bottom">
-        <ion-card mode="ios" class="ion-no-margin d-grid-center ion-padding dashboard ion-activatable h-100"
+        <ion-card mode="ios" class="ion-no-margin d-grid-center ion-padding dashboard ion-activatable h-100 shadow-none"
           (click)="navTo('purchased-courses')">
           <ion-ripple-effect></ion-ripple-effect>
-          <ion-text color="white">
+          <ion-text color="dark">
             <p class="ion-text-center size-18 fw-bold">Courses Subscribed</p>
           </ion-text>
         </ion-card>
       </ion-col>
       <ion-col size="12" size-lg="4" size-xl="3" class="ion-margin-bottom">
-        <ion-card mode="ios" class="ion-no-margin d-grid-center ion-padding dashboard ion-activatable h-100"
+        <ion-card mode="ios" class="ion-no-margin d-grid-center ion-padding dashboard ion-activatable h-100 shadow-none"
           (click)="navTo('courses')">
           <ion-ripple-effect></ion-ripple-effect>
-          <ion-text color="white">
+          <ion-text color="dark">
             <p class="ion-text-center size-18 fw-bold">Courses</p>
           </ion-text>
         </ion-card>
       </ion-col>
-      <ion-col size="12" size-lg="4" size-xl="3" class="ion-margin-bottom">
-        <ion-card mode="ios" class="ion-no-margin d-grid-center ion-padding dashboard ion-activatable h-100"
+      <!-- <ion-col size="12" size-lg="4" size-xl="3" class="ion-margin-bottom">
+        <ion-card mode="ios" class="ion-no-margin d-grid-center ion-padding dashboard ion-activatable h-100 shadow-none"
           (click)="navTo('progress')">
           <ion-ripple-effect></ion-ripple-effect>
-          <ion-text color="white">
+          <ion-text color="dark">
             <p class="ion-text-center size-18 fw-bold">Gurukul Analysis</p>
           </ion-text>
         </ion-card>
-      </ion-col>
+      </ion-col> -->
       <!-- <ion-col size="12" size-lg="4" size-xl="3" class="ion-margin-bottom">
-        <ion-card mode="ios" class="ion-no-margin d-grid-center ion-padding dashboard ion-activatable h-100"
+        <ion-card mode="ios" class="ion-no-margin d-grid-center ion-padding dashboard ion-activatable h-100 shadow-none"
           (click)="navTo('orders')">
           <ion-ripple-effect></ion-ripple-effect>
-          <ion-text color="white">
+          <ion-text color="dark">
             <p class="ion-text-center size-18 fw-bold">Orders</p>
           </ion-text>
         </ion-card>
       </ion-col> -->
       <ion-col size="12" size-lg="4" size-xl="3" class="ion-margin-bottom" (click)="navTo('account')">
-        <ion-card mode="ios" class="ion-no-margin d-grid-center ion-padding dashboard ion-activatable h-100">
+        <ion-card mode="ios"
+          class="ion-no-margin d-grid-center ion-padding dashboard ion-activatable h-100 shadow-none">
           <ion-ripple-effect></ion-ripple-effect>
-          <ion-text color="white">
+          <ion-text color="dark">
             <p class="ion-text-center size-18 fw-bold">Account</p>
           </ion-text>
         </ion-card>

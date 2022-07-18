@@ -1,5 +1,10 @@
 .dashboard-header {
     height: 150px;
+
+    ion-avatar {
+        height: 48px;
+        width: 48px;
+    }
 }
 
 .action-btn {
@@ -8,13 +13,14 @@
 }
 
 .notification-count {
-    top: -5px;
-    left: 87px;
+    top: -10px;
+    left: 10px;
     z-index: 99;
 }
 
 .dashboard {
-    background: rgba(var(--ion-color-secondary-rgb), 0.5);
+    background: var(--ion-color-white);
+    background: rgba(var(--ion-color-white-rgb), 0.5);
     min-height: 120px;
 }
 
@@ -24,5 +30,5 @@
     border-top-right-radius: var(--border-value);
     min-height: calc(100% - 150px);
     height: fit-content;
-    background: rgba(var(--ion-color-secondary-rgb), 0.3);
+    background: var(--ion-color-primary);
 }

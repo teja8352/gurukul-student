@@ -39,7 +39,7 @@ export class TestPage implements OnInit {
       this.test = resp;
       this.cd.detectChanges();
     });
-    this.dataService.getStudentById(localStorage.getItem('uid') || '').subscribe((resp: any) => {
+    this.dataService.getStudentById(localStorage.getItem('student_id') || '').subscribe((resp: any) => {
       this.student = resp[0];
       localStorage.setItem('student', JSON.stringify(this.student));
       this.cd.detectChanges();

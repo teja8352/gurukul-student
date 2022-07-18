@@ -1,3 +1,4 @@
+import { HttpClient, HttpEventType } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import * as saveAs from 'file-saver';
@@ -6,6 +7,7 @@ import { CommonService } from 'src/app/services/common/common.service';
 import { DataService } from 'src/app/services/data/data.service';
 import { StateService } from 'src/app/services/state/state.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 
 @Component({
   selector: 'app-purchased-test',
@@ -23,31 +25,34 @@ export class PurchasedTestPage implements OnInit {
   public questionPaper: any = null;
   public isAudioPlaying: boolean = true;
   public zoom: number = 1;
+  public review: string = null;
+  public downloadProgress: number = 0;
 
   constructor(
     private cd: ChangeDetectorRef,
+    private http: HttpClient,
     private dataService: DataService,
     private stateService: StateService,
     private storageService: StorageService,
     private loadingCtrl: LoadingController,
     private commonService: CommonService
   ) {
-    // this.courseId = this.stateService.getData('course')?.id || 'MXjcmrbvH9fKCd62NMd0';
-    // this.testId = this.stateService.getData('test')?.id || '2zVzaq6HimnRKycKiNW9';
-    // this.dataService.getTestById(this.testId).subscribe((resp: any) => {
-    //   this.test = resp;
-    //   this.cd.detectChanges();
-    // });
-    // this.dataService.getScheduleByTestId(this.testId).subscribe((resp: any) => {
-    //   this.schedule = resp[0];
-    //   this.zoom = this.segment === 'schedule' ? 1 : this.zoom;
-    //   this.cd.detectChanges();
-    // });
-    // this.dataService.getQuestionPaperByTestId(this.testId).subscribe((resp: any) => {
-    //   this.questionPaper = resp[0];
-    //   this.zoom = this.segment === 'question-papers' ? 1 : this.zoom;
-    //   this.cd.detectChanges();
-    // });
+    this.courseId = this.stateService.getData('course')?.id || 'MXjcmrbvH9fKCd62NMd0';
+    this.testId = this.stateService.getData('test')?.id || '2zVzaq6HimnRKycKiNW9';
+    this.dataService.getTestById(this.testId).subscribe((resp: any) => {
+      this.test = resp;
+      this.cd.detectChanges();
+    });
+    this.dataService.getScheduleByTestId(this.testId).subscribe((resp: any) => {
+      this.schedule = resp[0];
+      this.zoom = this.segment === 'schedule' ? 1 : this.zoom;
+      this.cd.detectChanges();
+    });
+    this.dataService.getQuestionPaperByTestId(this.testId).subscribe((resp: any) => {
+      this.questionPaper = resp[0];
+      this.zoom = this.segment === 'question-papers' ? 1 : this.zoom;
+      this.cd.detectChanges();
+    });
   }
 
   ngOnInit() { }
@@ -234,6 +239,47 @@ export class PurchasedTestPage implements OnInit {
     }
   }
 
+  async downloadQuestionPaper() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Downloading ' + '',
+    });
+    loading.present();
+    this.http.get('', { responseType: 'blob', reportProgress: true, observe: 'events' }).subscribe(async event => {
+      if (event.type === HttpEventType.DownloadProgress) {
+        this.downloadProgress = Math.round((100 * event.loaded) / event.total);
+      } else if (event.type === HttpEventType.Response) {
+        this.downloadProgress = 0;
+        const base64 = await this.converBlobToBase64(event.body) as string;
+
+        const foo = await Filesystem.writeFile({
+          path: '',
+          data: base64,
+          directory: Directory.Documents
+        });
+        loading.dismiss();
+      }
+    }, (err: any) => {
+      console.error('Error while downloading the question paper:::::::::::::\n', err);
+      loading.dismiss();
+    });
+  }
+
+  downloadValuesAnswerSheet() {
+
+  }
+
+  saveFile(base64: any) {
+    Filesystem.writeFile({
+      path: 'name',
+      data: base64,
+      directory: Directory.Documents
+    }).then((resp: any) => {
+      this.commonService.presentToast('' + ' downloaded.');
+    }, (err: any) => {
+      console.error('Error while saving the file:::::::\n', err);
+    });
+  }
+
   pageRendered(event: any) {
     // console.log('event::::::::::::::::::::\n', event);
   }
@@ -249,4 +295,12 @@ export class PurchasedTestPage implements OnInit {
     }
   }
 
+  private converBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = () => {
+      resolve(reader.result);
+    };
+    reader.readAsDataURL(blob);
+  });
 }

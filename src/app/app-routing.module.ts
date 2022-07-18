@@ -9,6 +9,17 @@ const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['dashboard']);
 
 const routes: Routes = [
+  // {
+  //   path: '',
+  //   loadChildren: () =>
+  //     import('./pages/login/login.module').then((m) => m.LoginPageModule),
+  //   ...canActivate(redirectLoggedInToHome),
+  // },
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full',
+  },
   {
     path: 'courses',
     loadChildren: () => import('./pages/courses/courses.module').then(m => m.CoursesPageModule),
@@ -16,15 +27,16 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule),
+    ...canActivate(redirectLoggedInToHome),
   },
   {
     path: 'register',
-    loadChildren: () => import('./pages/register/register.module').then(m => m.RegisterPageModule)
+    loadChildren: () => import('./pages/register/register.module').then(m => m.RegisterPageModule),
+    ...canActivate(redirectLoggedInToHome),
   },
   {
     path: 'dashboard',
     loadChildren: () => import('./pages/dasboard/dasboard.module').then(m => m.DasboardPageModule),
-
   },
   {
     path: 'tests',
@@ -51,6 +63,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/purchased-tests/purchased-tests.module').then(m => m.PurchasedTestsPageModule),
   },
   {
+    path: 'purchased-test',
+    loadChildren: () => import('./pages/purchased-test/purchased-test.module').then(m => m.PurchasedTestPageModule)
+  },
+  {
     path: 'test',
     loadChildren: () => import('./pages/test/test.module').then(m => m.TestPageModule),
   },
@@ -59,30 +75,21 @@ const routes: Routes = [
     loadChildren: () => import('./pages/progress/progress.module').then(m => m.ProgressPageModule),
   },
   {
-    path: '',
-    redirectTo: '/login',
-    pathMatch: 'full',
-  },
-  {
     path: '**',
     redirectTo: '',
     pathMatch: 'full',
   },
   {
     path: 'summay-of-concepts',
-    loadChildren: () => import('./pages/summay-of-concepts/summay-of-concepts.module').then( m => m.SummayOfConceptsPageModule),
+    loadChildren: () => import('./pages/summay-of-concepts/summay-of-concepts.module').then(m => m.SummayOfConceptsPageModule),
   },
   {
     path: 'question-papers',
-    loadChildren: () => import('./pages/question-papers/question-papers.module').then( m => m.QuestionPapersPageModule),
+    loadChildren: () => import('./pages/question-papers/question-papers.module').then(m => m.QuestionPapersPageModule),
   },
   {
     path: 'schedule',
-    loadChildren: () => import('./pages/schedule/schedule.module').then( m => m.SchedulePageModule),
-  },
-  {
-    path: 'purchased-test',
-    loadChildren: () => import('./pages/purchased-test/purchased-test.module').then( m => m.PurchasedTestPageModule)
+    loadChildren: () => import('./pages/schedule/schedule.module').then(m => m.SchedulePageModule),
   },
 ];
 
