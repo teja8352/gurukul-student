@@ -7,8 +7,8 @@
       </ion-avatar>
       <ion-label color="dark">
         <h2 class="size-22 fw-bold">{{student.first_name}} {{student.last_name}}</h2>
-        <p class="size-14" style="color: var(--ion-color-medium);">
-          Roll No.: {{student.id}}
+        <p class="size-12" style="color: var(--ion-color-medium);">
+          Roll No.: {{student.id || '1234'}}
         </p>
       </ion-label>
       <ion-buttons slot="end">

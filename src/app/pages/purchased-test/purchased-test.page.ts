@@ -1,6 +1,6 @@
 import { HttpClient, HttpEventType } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ModalController, Platform } from '@ionic/angular';
 import * as saveAs from 'file-saver';
 import { Test } from 'src/app/models/course.interface';
 import { CommonService } from 'src/app/services/common/common.service';
@@ -8,14 +8,17 @@ import { DataService } from 'src/app/services/data/data.service';
 import { StateService } from 'src/app/services/state/state.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { Filesystem, Directory } from '@capacitor/filesystem';
-
+import { Downloader, DownloadRequest, NotificationVisibility } from '@ionic-native/downloader';
+// import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
+// import { File } from '@awesome-cordova-plugins/file/ngx';
+import { VideoPlayer } from '@awesome-cordova-plugins/video-player/ngx';
+import { VideoPlayerPage } from 'src/app/video-player/video-player.page';
 @Component({
   selector: 'app-purchased-test',
   templateUrl: './purchased-test.page.html',
   styleUrls: ['./purchased-test.page.scss'],
 })
 export class PurchasedTestPage implements OnInit {
-
   public test: Test = null;
   private courseId: string;
   private testId: string;
@@ -35,7 +38,12 @@ export class PurchasedTestPage implements OnInit {
     private stateService: StateService,
     private storageService: StorageService,
     private loadingCtrl: LoadingController,
-    private commonService: CommonService
+    private commonService: CommonService,
+    // private transfer: FileTransfer,
+    // private file: File,
+    private videoPlayer: VideoPlayer,
+    private platform: Platform,
+    private modalController: ModalController
   ) {
     this.courseId = this.stateService.getData('course')?.id || 'MXjcmrbvH9fKCd62NMd0';
     this.testId = this.stateService.getData('test')?.id || '2zVzaq6HimnRKycKiNW9';
@@ -45,6 +53,7 @@ export class PurchasedTestPage implements OnInit {
     });
     this.dataService.getScheduleByTestId(this.testId).subscribe((resp: any) => {
       this.schedule = resp[0];
+      console.log("schedule::::::::", this.schedule);
       this.zoom = this.segment === 'schedule' ? 1 : this.zoom;
       this.cd.detectChanges();
     });
@@ -68,8 +77,15 @@ export class PurchasedTestPage implements OnInit {
     // if(this.audio.canPlayType)
   }
 
-  playVideo(url: string) {
-    //
+  async playVideo(file: any) {
+    console.log("video file:::::::::", file)
+    const modal = await this.modalController.create({
+      component: VideoPlayerPage,
+      componentProps: { file },
+      cssClass: 'video-modal',
+      backdropDismiss: false,
+    });
+    modal.present();
   }
 
   download(file: any) {
@@ -244,28 +260,63 @@ export class PurchasedTestPage implements OnInit {
       message: 'Downloading ' + '',
     });
     loading.present();
-    this.http.get('', { responseType: 'blob', reportProgress: true, observe: 'events' }).subscribe(async event => {
-      if (event.type === HttpEventType.DownloadProgress) {
-        this.downloadProgress = Math.round((100 * event.loaded) / event.total);
-      } else if (event.type === HttpEventType.Response) {
-        this.downloadProgress = 0;
-        const base64 = await this.converBlobToBase64(event.body) as string;
+    // this.http.get('', { responseType: 'blob', reportProgress: true, observe: 'events' }).subscribe(async event => {
+    //   if (event.type === HttpEventType.DownloadProgress) {
+    //     this.downloadProgress = Math.round((100 * event.loaded) / event.total);
+    //   } else if (event.type === HttpEventType.Response) {
+    //     this.downloadProgress = 0;
+    //     const base64 = await this.converBlobToBase64(event.body) as string;
 
-        const foo = await Filesystem.writeFile({
-          path: '',
-          data: base64,
-          directory: Directory.Documents
-        });
-        loading.dismiss();
+    //     const foo = await Filesystem.writeFile({
+    //       path: '',
+    //       data: base64,
+    //       directory: Directory.Documents
+    //     });
+    //     loading.dismiss();
+    //   }
+    // }, (err: any) => {
+    //   console.error('Error while downloading the question paper:::::::::::::\n', err);
+    //   loading.dismiss();
+    // });
+    var request: DownloadRequest = {
+      uri: this.schedule.file_url,
+      title: this.schedule.name,
+      description: '',
+      mimeType: '',
+      visibleInDownloadsUi: true,
+      notificationVisibility: NotificationVisibility.VisibleNotifyCompleted,
+      destinationInExternalFilesDir: {
+        dirType: 'Download',
+        subPath: this.schedule.name
       }
-    }, (err: any) => {
-      console.error('Error while downloading the question paper:::::::::::::\n', err);
-      loading.dismiss();
-    });
+    };
+    Downloader.download(request)
+      .then((location: string) => {
+        console.log('File downloaded at:' + location);
+        loading.dismiss();
+
+      })
+      .catch((error: any) => console.error(error));
   }
 
   downloadValuesAnswerSheet() {
-
+    var request: DownloadRequest = {
+      uri: this.schedule.file_url,
+      title: this.schedule.name,
+      description: '',
+      mimeType: '',
+      visibleInDownloadsUi: true,
+      notificationVisibility: NotificationVisibility.VisibleNotifyCompleted,
+      destinationInExternalFilesDir: {
+        dirType: 'Download',
+        subPath: this.schedule.name
+      }
+    };
+    Downloader.download(request)
+      .then((location: string) => {
+        console.log('File downloaded at:' + location);
+      })
+      .catch((error: any) => console.error(error));
   }
 
   saveFile(base64: any) {
@@ -303,4 +354,37 @@ export class PurchasedTestPage implements OnInit {
     };
     reader.readAsDataURL(blob);
   });
+
+
+
+  downloadPdf() {
+    var request: DownloadRequest = {
+      uri: this.schedule.file_url,
+      title: this.schedule.name,
+      description: '',
+      mimeType: '',
+      visibleInDownloadsUi: true,
+      notificationVisibility: NotificationVisibility.VisibleNotifyCompleted,
+      destinationInExternalFilesDir: {
+        dirType: 'Download',
+        subPath: this.schedule.name
+      }
+    };
+    Downloader.download(request)
+      .then((location: string) => {
+        console.log('File downloaded at:' + location);
+
+      })
+      .catch((error: any) => console.error(error));
+
+    // this.platform.ready().then(() => {
+    //   const fileTransfer: FileTransferObject = this.transfer.create();
+    //   fileTransfer.download(this.schedule.file_url, this.file.dataDirectory + this.schedule.name).then((entry) => {
+    //     console.log('download complete: ' + entry.toURL());
+    //   }, (error) => {
+    //     console.log("error:::::::", error)
+    //   });
+    // });
+  }
+
 }

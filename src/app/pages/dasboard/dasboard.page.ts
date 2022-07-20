@@ -22,7 +22,8 @@ export class DasboardPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.student = localStorage.getItem('student');
+    this.student =JSON.parse(localStorage.getItem('student'));
+    console.log(this.student)
   }
 
   navTo(path: string) {

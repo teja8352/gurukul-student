@@ -1,0 +1,17 @@
+<ion-content color="dark">
+  <ion-header class="dark">
+    <ion-toolbar class="dark">
+      <ion-buttons slot="end">
+        <ion-button (click)="dismiss()">
+          <ion-icon name="close" slot="icon-only" color="dark"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title class="size-12">{{file.name || 'Video'}}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div class="h-100 w-100">
+    <video controls autoplay class="h-100 w-100">
+      <source [src]="file.file_url" type="video/mp4">
+    </video>
+  </div>
+</ion-content>

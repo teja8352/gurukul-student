@@ -9,6 +9,8 @@ import { PurchasedTestPageRoutingModule } from './purchased-test-routing.module'
 import { PurchasedTestPage } from './purchased-test.page';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { QuillModule } from 'ngx-quill';
+import { VideoPlayerPageModule } from 'src/app/video-player/video-player.module';
+import { VideoPlayer } from '@awesome-cordova-plugins/video-player/ngx';
 
 @NgModule({
   imports: [
@@ -17,6 +19,7 @@ import { QuillModule } from 'ngx-quill';
     IonicModule,
     PurchasedTestPageRoutingModule,
     PdfViewerModule,
+    VideoPlayerPageModule,
     QuillModule.forRoot({
       modules: {
         syntax: true
@@ -27,6 +30,8 @@ import { QuillModule } from 'ngx-quill';
       placeholder: 'EVALUATOR’S REMARKS',
     }),
   ],
-  declarations: [PurchasedTestPage]
+  declarations: [PurchasedTestPage],
+  providers:[VideoPlayer]
+
 })
 export class PurchasedTestPageModule { }

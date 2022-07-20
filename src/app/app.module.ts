@@ -17,6 +17,9 @@ import { indexedDBLocalPersistence, initializeAuth } from 'firebase/auth';
 import { getApp } from 'firebase/app';
 // import { QuillModule } from 'ngx-quill';
 import { QuillConfigModule } from 'ngx-quill/config';
+// import { FileTransfer } from '@awesome-cordova-plugins/file-transfer/ngx';
+// import { File } from '@awesome-cordova-plugins/file/ngx';
+import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -50,7 +53,14 @@ import { QuillConfigModule } from 'ngx-quill/config';
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [
+    // File,
+    // FileTransfer,
+    ScreenOrientation,
+    {
+      provide: RouteReuseStrategy, useClass: IonicRouteStrategy
+    }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

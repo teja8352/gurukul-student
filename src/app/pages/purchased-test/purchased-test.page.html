@@ -31,8 +31,13 @@
 <ion-content>
   <div *ngIf="segment === 'schedule'" class="w-100 h-100 position-relative">
     <p class="size-14 fw-bold m-0 p-3 ion-border" style="background: var(--ion-color-light);">
-      {{schedule?.name || 'Schedule Name'}}
-    </p>
+      {{schedule?.name || 'Schedule Name'}}</p>
+    <ion-buttons slot="end">
+      <ion-button (click)="downloadPdf()">
+        <ion-icon name="download-outline" slot="icon-only" color="dark"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
     <pdf-viewer [src]="schedule?.file_url" (page)="0" [zoom]="zoom" (page-rendered)="pageRendered($event)"
       class="d-block w-100" [render-text]="true" [original-size]="false"
       style="height: calc(100% - 53px); background: var(--ion-color-medium);">
@@ -108,8 +113,8 @@
     <ion-list lines="none">
       <ion-row class="ion-margin-top">
         <ion-col size="6" size-lg="4" size-xl="3" *ngFor="let file of test?.file_urls" class="ion-margin-bottom">
-          <ion-card class="h-100 ion-no-margin file" color="white">
-            <div class="file-type d-grid-center" (click)="playVideo(file.file_url)">
+          <ion-card class="h-100 ion-no-margin file" color="white" (click)="playVideo(file)">
+            <div class="file-type d-grid-center">
               <ion-icon color="medium" name="film-outline"></ion-icon>
             </div>
             <div class="file-name">
@@ -122,6 +127,7 @@
       </ion-row>
     </ion-list>
   </div>
+
 
   <div *ngIf="segment === 'answers'">
     <ion-list>
