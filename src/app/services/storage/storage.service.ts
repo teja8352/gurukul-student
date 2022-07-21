@@ -39,9 +39,9 @@ export class StorageService {
     }
   }
 
-  async uploadAnswer(data: any) {
+  async uploadAnswer(data: any, filePath: string = undefined) {
     const user = this.auth.currentUser;
-    const path = `uploads/answers/${data.name}`;
+    const path = filePath ? filePath : `uploads/answers/${data.name}`;
     const storageRef = ref(this.storage, path);
     try {
       await uploadBytes(storageRef, data.file);

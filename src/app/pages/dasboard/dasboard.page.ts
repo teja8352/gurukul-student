@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CommonService } from 'src/app/services/common/common.service';
+import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 
 @Component({
   selector: 'app-dasboard',
@@ -16,14 +17,24 @@ export class DasboardPage implements OnInit {
     private commonService: CommonService,
     private authService: AuthService,
     private router: Router,
+    private iab: InAppBrowser
   ) { }
 
   ngOnInit() {
   }
 
   ionViewWillEnter() {
-    this.student =JSON.parse(localStorage.getItem('student'));
-    console.log(this.student)
+    this.student = JSON.parse(localStorage.getItem('student'));
+  }
+
+  openLink() {
+    const browser = this.iab.create('http://www.gurukulforca.com', '_blank');
+
+    browser.on('loadstop').subscribe(event => {
+      //
+    });
+
+    browser.close();
   }
 
   navTo(path: string) {
@@ -31,7 +42,12 @@ export class DasboardPage implements OnInit {
   }
 
   logout() {
-    localStorage.clear();
-    this.router.navigateByUrl('login', { replaceUrl: true });
+    this.authService.logout().then(resp => {
+      localStorage.clear();
+      this.router.navigateByUrl('login', { replaceUrl: true });
+    }, err => {
+      console.error('Error while logout:::::::::\n', err);
+      this.commonService.presentToast('Unable to logout', 'danger');
+    });
   }
 }

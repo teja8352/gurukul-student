@@ -16,7 +16,10 @@ import {
   DocumentData,
   getDoc,
   getDocs,
-  QuerySnapshot
+  QuerySnapshot,
+  arrayRemove,
+  arrayUnion,
+  orderBy
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { FirebaseCollections } from 'src/app/constants/fb-collections';
@@ -31,6 +34,47 @@ export class DataService {
   constructor(
     private firestore: Firestore
   ) { }
+
+
+  /**
+   * @description Firebase Data
+   */
+  get(collectionName: string): Observable<any[]> {
+    const ref = collection(this.firestore, collectionName);
+    const queryRef = query(ref, orderBy('created_at', 'asc'));
+    return collectionData(queryRef, { idField: 'id' }) as Observable<any[]>;
+  }
+
+  getById(collectionName: string, id: string): Observable<any> {
+    const docRef = doc(this.firestore, collectionName + `/${id}`);
+    return docData(docRef, { idField: 'id' }) as Observable<any>;
+  }
+
+  getByUID(collectionName: string, uid: string) {
+    console.log(collectionName, uid);
+    const ref = collection(this.firestore, collectionName);
+    const queryRef = query(ref, where('uid', '==', uid), orderBy('created_at', 'asc'));
+    return collectionData(queryRef, { idField: 'id' }) as Observable<any[]>;
+  }
+
+  add(collectionName: string, data: any) {
+    const ref = collection(this.firestore, collectionName);
+    return addDoc(ref, { ...data, created_at: serverTimestamp() });
+  }
+
+  delete(collectionName: string, data: any) {
+    const docRef = doc(this.firestore, collectionName + `/${data.id}`);
+    return collectionName === FirebaseCollections.MEDIA || collectionName === FirebaseCollections.MEDIA ?
+      updateDoc(docRef, { media: arrayRemove(data?.media), updated_at: serverTimestamp() }) :
+      deleteDoc(docRef);
+  }
+
+  update(collectionName: string, data: any) {
+    const docRef = doc(this.firestore, collectionName + `/${data.id}`);
+    return collectionName === FirebaseCollections.MEDIA || collectionName === FirebaseCollections.MEDIA ?
+      updateDoc(docRef, { media: arrayUnion(...data?.media), updated_at: serverTimestamp() }) :
+      updateDoc(docRef, { ...data, updated_at: serverTimestamp() });
+  }
 
   /**
    * @description Course Data
@@ -57,6 +101,18 @@ export class DataService {
   getTestById(id): Observable<Test> {
     const testDocRef = doc(this.firestore, `tests/${id}`);
     return docData(testDocRef, { idField: 'id' }) as Observable<Test>;
+  }
+
+  getRemarksByTestId(testId: string, studentId: string): Observable<any[]> {
+    const scheduleRef = collection(this.firestore, FirebaseCollections.STUDENT_ACTIVITY);
+    const scheduleQueryRef = query(scheduleRef, where('test_id', '==', testId || ''), where('student_id', '==', studentId || ''));
+    return collectionData(scheduleQueryRef, { idField: 'id' }) as Observable<any[]>;
+  }
+
+  getAnswerSheetByTestId(testId: string): Observable<any[]> {
+    const scheduleRef = collection(this.firestore, FirebaseCollections.ANSWER_SHEET);
+    const scheduleQueryRef = query(scheduleRef, where('test_id', '==', testId || ''));
+    return collectionData(scheduleQueryRef, { idField: 'id' }) as Observable<any[]>;
   }
 
   getScheduleByTestId(testId: string): Observable<any[]> {
@@ -122,6 +178,13 @@ export class DataService {
   getStudent(data: any): Observable<Student[]> {
     const ordersRef = collection(this.firestore, 'students');
     const orderQueryRef = query(ordersRef, where('email', '==', data.email || ''), where('password', '==', data.password || ''));
+    return collectionData(orderQueryRef, { idField: 'id' }) as Observable<Student[]>;
+  }
+
+
+  checkStudent(email: string): Observable<Student[]> {
+    const ordersRef = collection(this.firestore, FirebaseCollections.STUDENTS);
+    const orderQueryRef = query(ordersRef, where('email', '==', email));
     return collectionData(orderQueryRef, { idField: 'id' }) as Observable<Student[]>;
   }
 

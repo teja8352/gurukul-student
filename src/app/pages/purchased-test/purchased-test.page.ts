@@ -8,11 +8,13 @@ import { DataService } from 'src/app/services/data/data.service';
 import { StateService } from 'src/app/services/state/state.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { Filesystem, Directory } from '@capacitor/filesystem';
-import { Downloader, DownloadRequest, NotificationVisibility } from '@ionic-native/downloader';
+import { Downloader, DownloadRequest, NotificationVisibility } from '@ionic-native/downloader/ngx';
 // import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 // import { File } from '@awesome-cordova-plugins/file/ngx';
 import { VideoPlayer } from '@awesome-cordova-plugins/video-player/ngx';
 import { VideoPlayerPage } from 'src/app/video-player/video-player.page';
+import { Student } from 'src/app/models/student.interface';
+import { FirebaseCollections } from 'src/app/constants/fb-collections';
 @Component({
   selector: 'app-purchased-test',
   templateUrl: './purchased-test.page.html',
@@ -22,14 +24,16 @@ export class PurchasedTestPage implements OnInit {
   public test: Test = null;
   private courseId: string;
   private testId: string;
-  public segment: string = 'schedule';
+  public remarks: any;
+  public segment = 'schedule';
   private audio: HTMLAudioElement;
   public schedule: any = null;
+  public answerSheet: any = null;
   public questionPaper: any = null;
-  public isAudioPlaying: boolean = true;
-  public zoom: number = 1;
-  public review: string = null;
-  public downloadProgress: number = 0;
+  public isAudioPlaying = true;
+  public zoom = 1;
+  public downloadProgress = 0;
+  public student: Student;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -43,7 +47,8 @@ export class PurchasedTestPage implements OnInit {
     // private file: File,
     private videoPlayer: VideoPlayer,
     private platform: Platform,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private downloader: Downloader,
   ) {
     this.courseId = this.stateService.getData('course')?.id || 'MXjcmrbvH9fKCd62NMd0';
     this.testId = this.stateService.getData('test')?.id || '2zVzaq6HimnRKycKiNW9';
@@ -51,15 +56,22 @@ export class PurchasedTestPage implements OnInit {
       this.test = resp;
       this.cd.detectChanges();
     });
-    this.dataService.getScheduleByTestId(this.testId).subscribe((resp: any) => {
-      this.schedule = resp[0];
-      console.log("schedule::::::::", this.schedule);
-      this.zoom = this.segment === 'schedule' ? 1 : this.zoom;
+    this.dataService.getAnswerSheetByTestId(this.testId).subscribe((resp: any) => {
+      this.answerSheet = resp[0];
       this.cd.detectChanges();
     });
     this.dataService.getQuestionPaperByTestId(this.testId).subscribe((resp: any) => {
       this.questionPaper = resp[0];
       this.zoom = this.segment === 'question-papers' ? 1 : this.zoom;
+      this.cd.detectChanges();
+    });
+    this.dataService.getStudentById(localStorage.getItem('student_id') || '').subscribe((resp: any) => {
+      this.student = resp;
+      localStorage.setItem('student', JSON.stringify(this.student));
+      this.cd.detectChanges();
+    });
+    this.dataService.getRemarksByTestId(this.testId, localStorage.getItem('student_id')).subscribe((response: any) => {
+      this.remarks = response[0];
       this.cd.detectChanges();
     });
   }
@@ -78,7 +90,7 @@ export class PurchasedTestPage implements OnInit {
   }
 
   async playVideo(file: any) {
-    console.log("video file:::::::::", file)
+    console.log('video file:::::::::', file);
     const modal = await this.modalController.create({
       component: VideoPlayerPage,
       componentProps: { file },
@@ -223,6 +235,83 @@ export class PurchasedTestPage implements OnInit {
     // }
   }
 
+  async uploadAnswerSheet(event: any) {
+    const selectedFile: any = event.target.files[0];
+    const loading = await this.loadingCtrl.create({ message: 'Uploading Answer Sheet' });
+    loading.present();
+    try {
+      const file = {
+        file: selectedFile,
+        name: this.courseId + '_G_' + this.testId + '_G_' + selectedFile.name,
+        test_id: this.testId
+      };
+      const upload: any = await this.storageService.uploadAnswer(file, `uploads/answer_sheets/${file.name}`);
+      if (upload && upload.file_url) {
+        const answerSheet: any = {
+          file_url: upload.file_url,
+          type: this.commonService.getExtension(selectedFile.name),
+          name: selectedFile.name,
+          test_id: this.testId,
+          student_id: this.student.id,
+          student_name: this.student.first_name + ' ' + this.student.last_name,
+        };
+        if (this.commonService.isValidData(this.answerSheet?.id)) {
+          answerSheet.id = this.answerSheet.id;
+        }
+        this.dataService.update(FirebaseCollections.ANSWER_SHEET, answerSheet).then((resp: any) => {
+          // console.log('resp::::::::::::\n', resp);
+          const notification: any = {
+            title: 'Answer sheet updated',
+            description: this.student.first_name + ' ' + this.student.last_name + ' updated the answer sheet.',
+            test_id: this.testId,
+            studen_id: this.student.id,
+            student_name: this.student.first_name + ' ' + this.student.last_name,
+            status: 'unread'
+          };
+          this.dataService.add(FirebaseCollections.NOTIFICATIONS, notification).then((resp: any) => {
+            //
+          }, err => {
+            console.error('Error while adding notification:::::::::::\n', upload);
+          });
+          loading.dismiss();
+        }, err => {
+          loading.dismiss();
+          console.error('Error while uploading answer sheet:::::::::::\n', { ...err });
+          if (err.code === 'not-found' || err.code === 'invalid-argument') {
+            this.dataService.add(FirebaseCollections.ANSWER_SHEET, answerSheet).then((resp: any) => {
+              // console.log(resp);
+              const notification: any = {
+                title: 'Answer sheet uploaded',
+                description: this.student.first_name + ' ' + this.student.last_name + ' submitted the answer sheet.',
+                test_id: this.testId,
+                studen_id: this.student.id,
+                student_name: this.student.first_name + ' ' + this.student.last_name,
+                status: 'unread'
+              };
+              this.dataService.add(FirebaseCollections.NOTIFICATIONS, notification).then((resp: any) => {
+                //
+              }, err => {
+                console.error('Error while adding notification:::::::::::\n', upload);
+              });
+              this.dataService.getAnswerSheetByTestId(this.testId).subscribe((response: any) => {
+                this.answerSheet = response[0];
+              });
+            }, (error: any) => {
+              console.error('Error while adding answer sheet:::::::::::\n', error);
+            });
+          }
+        });
+      } else {
+        console.error('Error while uploading answer sheet:::::::::::\n', upload);
+        loading.dismiss();
+      }
+    } catch (exception: any) {
+      console.error('Exception while uploading answer sheet:::::::::::\n', exception, { ...exception });
+      loading.dismiss();
+    }
+  }
+
+
   async fileSelected(event: any) {
     const selectedFile: any = event.target.files[0];
     const loading = await this.loadingCtrl.create({ message: 'Uploading document' });
@@ -278,7 +367,7 @@ export class PurchasedTestPage implements OnInit {
     //   console.error('Error while downloading the question paper:::::::::::::\n', err);
     //   loading.dismiss();
     // });
-    var request: DownloadRequest = {
+    const request: DownloadRequest = {
       uri: this.schedule.file_url,
       title: this.schedule.name,
       description: '',
@@ -290,17 +379,17 @@ export class PurchasedTestPage implements OnInit {
         subPath: this.schedule.name
       }
     };
-    Downloader.download(request)
-      .then((location: string) => {
-        console.log('File downloaded at:' + location);
-        loading.dismiss();
+    this.downloader.download(request).then((location: string) => {
+      console.log('File downloaded at:' + location);
+      loading.dismiss();
 
-      })
-      .catch((error: any) => console.error(error));
+    }, (error: any) => {
+      console.error('Error while downloading pdf:::::::', error);
+    });
   }
 
   downloadValuesAnswerSheet() {
-    var request: DownloadRequest = {
+    const request: DownloadRequest = {
       uri: this.schedule.file_url,
       title: this.schedule.name,
       description: '',
@@ -312,11 +401,11 @@ export class PurchasedTestPage implements OnInit {
         subPath: this.schedule.name
       }
     };
-    Downloader.download(request)
-      .then((location: string) => {
-        console.log('File downloaded at:' + location);
-      })
-      .catch((error: any) => console.error(error));
+    this.downloader.download(request).then((location: string) => {
+      console.log('File downloaded at:' + location);
+    }, (error: any) => {
+      console.error('Error while downloading pdf:::::::', error);
+    });
   }
 
   saveFile(base64: any) {
@@ -346,19 +435,8 @@ export class PurchasedTestPage implements OnInit {
     }
   }
 
-  private converBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = reject;
-    reader.onload = () => {
-      resolve(reader.result);
-    };
-    reader.readAsDataURL(blob);
-  });
-
-
-
   downloadPdf() {
-    var request: DownloadRequest = {
+    const request: DownloadRequest = {
       uri: this.schedule.file_url,
       title: this.schedule.name,
       description: '',
@@ -370,13 +448,12 @@ export class PurchasedTestPage implements OnInit {
         subPath: this.schedule.name
       }
     };
-    Downloader.download(request)
+    this.downloader.download(request)
       .then((location: string) => {
         console.log('File downloaded at:' + location);
-
-      })
-      .catch((error: any) => console.error(error));
-
+      }, (error: any) => {
+        console.error('Error while downloading pdf:::::::', error);
+      });
     // this.platform.ready().then(() => {
     //   const fileTransfer: FileTransferObject = this.transfer.create();
     //   fileTransfer.download(this.schedule.file_url, this.file.dataDirectory + this.schedule.name).then((entry) => {
@@ -387,4 +464,12 @@ export class PurchasedTestPage implements OnInit {
     // });
   }
 
+  private converBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = () => {
+      resolve(reader.result);
+    };
+    reader.readAsDataURL(blob);
+  });
 }

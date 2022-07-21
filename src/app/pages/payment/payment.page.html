@@ -1,5 +1,5 @@
 <ion-header [translucent]="true" class="ion-no-border">
-  <ion-toolbar>
+  <ion-toolbar color="white">
     <ion-buttons slot="start">
       <ion-back-button icon="chevron-back-outline" defaultHref="tests"></ion-back-button>
     </ion-buttons>
@@ -9,7 +9,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" color="white">
 
   <ion-item>
     <ion-label>UPI</ion-label>
@@ -30,7 +30,7 @@
     <ion-note slot="end" color="danger">+91-9988776655</ion-note>
   </ion-item>
 
-  <ion-item lines="none" color="light" class="url" *ngIf="uploadedURL">
+  <ion-item color="white" lines="none" color="light" class="url" *ngIf="uploadedURL">
     <ion-label>
       <ion-text>
         {{uploadedURL || 1234}}
@@ -45,7 +45,7 @@
 
 </ion-content>
 <ion-footer>
-  <ion-toolbar>
+  <ion-toolbar color="white">
     <input type="file" #f id="fileInput" (change)="fileSelected($event)" />
     <ion-button for="fileInput" expand="full" class="ion-no-margin" size="large" (click)="f.click()">
       <span style="font-size: 14px">Upload payment acknowledgement</span>

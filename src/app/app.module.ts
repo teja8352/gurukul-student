@@ -20,6 +20,9 @@ import { QuillConfigModule } from 'ngx-quill/config';
 // import { FileTransfer } from '@awesome-cordova-plugins/file-transfer/ngx';
 // import { File } from '@awesome-cordova-plugins/file/ngx';
 import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
+import { Downloader } from '@ionic-native/downloader/ngx';
+import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,7 +32,7 @@ import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/n
     IonicModule.forRoot({
       backButtonIcon: 'chevron-back-outline',
       swipeBackEnabled: false,
-      _forceStatusbarPadding: true
+      _forceStatusbarPadding: true,
     }),
     // QuillModule.forRoot(),
     QuillConfigModule.forRoot({
@@ -56,7 +59,9 @@ import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/n
   providers: [
     // File,
     // FileTransfer,
+    Downloader,
     ScreenOrientation,
+    InAppBrowser,
     {
       provide: RouteReuseStrategy, useClass: IonicRouteStrategy
     }

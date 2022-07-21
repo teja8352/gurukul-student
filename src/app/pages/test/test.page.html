@@ -1,5 +1,5 @@
 <ion-header [translucent]="true" class="ion-no-border">
-  <ion-toolbar>
+  <ion-toolbar color="white">
     <ion-buttons slot="start">
       <ion-back-button icon="chevron-back-outline" defaultHref="purchased-tests"></ion-back-button>
     </ion-buttons>
@@ -7,7 +7,7 @@
       {{test?.title || 'Test'}}
     </ion-title>
   </ion-toolbar>
-  <ion-toolbar>
+  <ion-toolbar color="white">
     <ion-segment value="all" color="medium" scrollable="true" mode="md" [(ngModel)]="segment"
       (ionChange)="segmentChanged($event)">
 
@@ -27,11 +27,11 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" color="white">
   <div [ngSwitch]="segment">
 
     <div *ngSwitchCase="'content'">
-      <ion-list lines="none">
+      <ion-list lines="none" color="white">
         <ion-row class="ion-margin-top">
           <ion-col size="6" size-lg="4" size-xl="3" *ngFor="let file of test?.file_urls" class="ion-margin-bottom">
             <ion-card class="h-100 ion-no-margin file" color="white" (click)="download(file)">
@@ -75,7 +75,7 @@
     </div>
 
     <div *ngSwitchCase="'answers'">
-      <ion-list lines="none">
+      <ion-list lines="none" color="white">
         <ion-row class="ion-margin-top">
           <ion-col size="6" size-lg="4" size-xl="3" *ngFor="let file of test?.answers" class="ion-margin-bottom">
             <ion-card class="h-100 ion-no-margin file" color="white" (click)="download(file)">
@@ -122,7 +122,7 @@
     </div>
 
     <div *ngSwitchCase="'review-comments'">
-      <ion-list lines="none">
+      <ion-list lines="none" color="white">
         <ion-row class="ion-margin-top">
           <ion-col size="6" size-lg="4" size-xl="3" *ngFor="let file of test?.reviews" class="ion-margin-bottom">
             <ion-card class="h-100 ion-no-margin file" color="white" (click)="download(file)">
@@ -172,7 +172,7 @@
 </ion-content>
 
 <ion-footer *ngIf="segment === 'answers'">
-  <ion-toolbar>
+  <ion-toolbar color="white">
     <input type="file" #f id="fileInput" (change)="fileSelected($event)" />
     <ion-button for="fileInput" expand="full" class="ion-no-margin" size="large" (click)="f.click()">
       <span style="font-size: 14px">Upload Answer</span>

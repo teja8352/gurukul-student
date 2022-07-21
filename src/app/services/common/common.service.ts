@@ -25,6 +25,10 @@ export class CommonService {
     });
   }
 
+  isValidData(dataToCheck: any) {
+    return dataToCheck !== undefined && dataToCheck !== null && dataToCheck !== '' && dataToCheck !== [] && Object.keys(dataToCheck).length !== 0;
+  }
+
   getExtension(url: string) {
     let type: string = url.split(/[#?]/)[0].split('.').pop().trim();
     if (['jpg', 'jpeg', 'png', 'gif', 'tiff', 'svg'].includes(type.toLowerCase())) {

@@ -32,8 +32,8 @@ export class LoginPage implements OnInit {
 
   createForm() {
     this.loginForm = this.fb.group({
-      email: ['teja@g.co', [Validators.required, Validators.email]],
-      password: ['123456', [Validators.required, Validators.minLength(6)]],
+      email: [null, [Validators.required, Validators.email]],
+      password: [null, [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -45,42 +45,64 @@ export class LoginPage implements OnInit {
     const loading = await this.loadingController.create({ message: 'signing' });
     await loading.present();
 
-    this.dataService.getStudent(this.loginForm.value).subscribe(async (resp: any) => {
+    const user = await this.authService.login(this.loginForm.value);
+
+    console.log('user::::::::::\n', user);
+    if (user.code === 'auth/user-not-found') {
+      this.commonService.presentToast('Email doesn\'t exists with us', 'danger');
       await loading.dismiss();
-      if (resp.length === 0) {
-        this.commonService.presentToast('Invalid credentials', 'danger');
-      } else {
-        localStorage.setItem('student', JSON.stringify(resp[0]));
-        localStorage.setItem('student_id', (resp[0].id));
-        this.router.navigateByUrl('dashboard', { replaceUrl: true });
+      return;
+    } else if (user.code === 'auth/wrong-password') {
+      this.commonService.presentToast('Invalid Password', 'danger');
+      await loading.dismiss();
+      return;
+    }
+
+    if (user) {
+      try {
+        this.dataService.checkStudent(this.loginForm.value.email).subscribe(async (resp: any) => {
+          await loading.dismiss();
+          if (resp.length <= 0 || JSON.stringify(resp) === '{}') {
+            this.showAlert('Login failed', 'Please try again!');
+          } else {
+            localStorage.setItem('uid', user.user.uid);
+            localStorage.setItem('student', JSON.stringify(resp[0]));
+            localStorage.setItem('student_id', (resp[0].id));
+            this.router.navigateByUrl('dashboard', { replaceUrl: true });
+          }
+        }, async (err) => {
+          console.error('Error while logging::::::::\n', err);
+          await loading.dismiss();
+          this.showAlert('Login failed', 'Please try again!');
+          this.logout();
+        });
+      } catch (e: any) {
+        console.error('Exception while logging::::::::\n', e);
+        this.logout();
       }
-    }, async (err) => {
-      console.error('Error while logging::::::::\n', err);
+    } else {
       await loading.dismiss();
       this.showAlert('Login failed', 'Please try again!');
-    });
-    // const user = await this.authService.login(this.loginForm.value);
-    // await loading.dismiss();
-
-    // if (user.code === 'auth/user-not-found') {
-    //   this.commonService.presentToast('Email doesn\'t exists with us', 'danger');
-    //   return;
-    // } else if (user.code === 'auth/wrong-password') {
-    //   this.commonService.presentToast('Invalid Password', 'danger');
-    //   return;
-    // }
-
-    // if (user) {
-    //   console.log("user::::::",user,user.user.uid)
-    //   localStorage.setItem("uid",user.user.uid)
-    //   this.router.navigateByUrl('/dashboard', { replaceUrl: true });
-    // } else {
-    //   this.showAlert('Login failed', 'Please try again!');
-    // }
+      this.logout();
+    }
   }
 
   showPassword() {
     this.isPasswordVisible = !this.isPasswordVisible;
+  }
+
+  forgotPasswd() {
+    this.router.navigateByUrl('forgot-password', { replaceUrl: true });
+  }
+
+  logout() {
+    this.authService.logout().then(resp => {
+      localStorage.clear();
+      this.router.navigateByUrl('login', { replaceUrl: true });
+    }, err => {
+      console.error('Error while logout:::::::::\n', err);
+      this.commonService.presentToast('Unable to logout', 'danger');
+    });
   }
 
   async showAlert(header, message) {

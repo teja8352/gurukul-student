@@ -1,5 +1,5 @@
 <ion-header [translucent]="true" class="ion-no-border">
-  <ion-toolbar>
+  <ion-toolbar color="white">
     <ion-buttons slot="start">
       <ion-back-button icon="chevron-back-outline" defaultHref="purchased-courses"></ion-back-button>
     </ion-buttons>
@@ -9,15 +9,16 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" color="white">
   <ion-header collapse="condense">
-    <ion-toolbar>
+    <ion-toolbar color="white">
       <ion-title size="large">Tests</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <ion-list lines="none">
-    <ion-item detail class="border-bottom ion-no-padding p-2 pl-3" (click)="openTest(test)" *ngFor="let test of tests">
+  <ion-list lines="none" color="white">
+    <ion-item color="white" detail class="border-bottom ion-no-padding p-2 pl-3" (click)="openTest(test)"
+      *ngFor="let test of tests">
       <ion-label class="ion-text-wrap">
         <h2 class="fw-semi-bold">
           {{ test.title }}

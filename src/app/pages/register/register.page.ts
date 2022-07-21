@@ -62,7 +62,6 @@ export class RegisterPage implements OnInit {
     if (user && user?.user?.uid) {
       this.dataService.addStudent({ ...this.registerForm.value, uid: user?.user?.uid }).then((resp: DocumentReference<DocumentData>) => {
         if (resp.id) {
-          localStorage.setItem('uid', user?.user?.uid);
           this.registerForm.reset();
           this.router.navigateByUrl('/login', { replaceUrl: true });
         }
@@ -70,8 +69,12 @@ export class RegisterPage implements OnInit {
         console.error('Error while adding the student:::::\n', err);
       });
     } else {
-      this.showAlert('Registration failed', 'Please try again!');
       console.error('Registration failed:::::::::::::\n', user);
+      if (JSON.stringify(user) === '{}') {
+        this.showAlert('Email ID already exists', 'Please try again with another email');
+      } else {
+        this.showAlert('Registration failed', 'Please try again!');
+      }
     }
   }
 
@@ -87,7 +90,6 @@ export class RegisterPage implements OnInit {
     });
     await alert.present();
   }
-
 
   // Easy access for form fields
   get email() {

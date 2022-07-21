@@ -1,0 +1,19 @@
+ion-item {
+    --background: rgba(var(--ion-color-light)) !important;
+    border-radius: 5px;
+}
+
+.sc-ion-input-md-h {
+    --placeholder-color: var(--ion-color-medium) !important;
+}
+
+.logo {
+    background: var(--ion-color-light);
+    width: 150px;
+    height: 150px;
+    border: 10px solid var(--ion-color-light);
+    background-image: url(../../../assets/student.png);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}

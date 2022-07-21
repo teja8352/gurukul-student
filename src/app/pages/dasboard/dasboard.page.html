@@ -1,14 +1,14 @@
 <ion-content color="white">
   <div class="dashboard-header pl-3 pt-5">
-    <ion-item class="bg-transparent" lines="none">
+    <ion-item color="white" class="bg-transparent" lines="none">
       <ion-avatar slot="start" class="shadow">
-        <ion-img src="https://www.dccomics.com/sites/default/files/Char_Gallery_Flash_758_6055049612af35.61135649.jpg">
+        <ion-img src="../../../assets/student.png">
         </ion-img>
       </ion-avatar>
       <ion-label color="dark">
         <h2 class="size-22 fw-bold">{{student.first_name}} {{student.last_name}}</h2>
         <p class="size-12" style="color: var(--ion-color-medium);">
-          Roll No.: {{student.id || '1234'}}
+          Course: {{student.course_type || 'CA'}}
         </p>
       </ion-label>
       <ion-buttons slot="end">
@@ -42,6 +42,15 @@
           </ion-text>
         </ion-card>
       </ion-col>
+      <ion-col size="12" size-lg="4" size-xl="3" class="ion-margin-bottom">
+        <ion-card mode="ios" class="ion-no-margin d-grid-center ion-padding dashboard ion-activatable h-100 shadow-none"
+          (click)="navTo('about-us')">
+          <ion-ripple-effect></ion-ripple-effect>
+          <ion-text color="dark">
+            <p class="ion-text-center size-18 fw-bold">About Gurukul</p>
+          </ion-text>
+        </ion-card>
+      </ion-col>
       <!-- <ion-col size="12" size-lg="4" size-xl="3" class="ion-margin-bottom">
         <ion-card mode="ios" class="ion-no-margin d-grid-center ion-padding dashboard ion-activatable h-100 shadow-none"
           (click)="navTo('progress')">
@@ -70,7 +79,24 @@
         </ion-card>
       </ion-col>
     </ion-row>
+    <ion-item class="bg-transparent" lines="none">
+      <ion-label class="ion-text-wrap" color="white">
+        <h1 class="fw-bold">Gurukul</h1>
+        <ion-text color="dark">
+          <p>M.G.Road. VIJAYAWADA - 520 010. Mobiles: +91 866 6626677. 8790006308. 8790006408.</p>
+          <p>Contact: <a href="mailto:gurukulforca@gmail.com"
+              style="color: var(--ion-color-dark)">gurukulforca@gmail.com</a></p>
+        </ion-text>
+      </ion-label>
+    </ion-item>
   </main>
 
 
 </ion-content>
+<ion-footer class="ion-no-border">
+  <ion-toolbar color="medium" (click)="openLink()">
+    <p class="ion-text-center w-100 h-100">
+      <ion-text color="white">https://www.gurukulforca.com</ion-text>
+    </p>
+  </ion-toolbar>
+</ion-footer>
